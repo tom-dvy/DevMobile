@@ -9,9 +9,12 @@ using UnityEngine.InputSystem;
 public class CarController : MonoBehaviour
 {
     [Header("Movement Settings")]
-    [SerializeField] private float forwardSpeed = 20f; // Speed of the car
+    [SerializeField] private float forwardSpeed = 30f; // Speed of the car
+    [SerializeField] private float acceleration = 10f; // How fast the car accelerates
     [SerializeField] private float turnSpeed = 100f; // Speed when player turns
-    [SerializeField] private float brakeForce = 20f; // Force applied when braking
+    [SerializeField] private float brakeDeceleration = 15f; // Deceleration rate when braking (higher = faster brake)
+    [SerializeField] private float naturalDeceleration = 2f; // Slowdown when not accelerating
+    [SerializeField] private float minSpeed = 0.1f; // Speed threshold to stop completely
 
     [Header("Input Settings")]
     [SerializeField] private bool useKeyboardInput = true; // Enable/disable keyboard input
@@ -20,7 +23,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private Key brakeKey = Key.Space; // Key to brake
 
     private Rigidbody rb;
-    private float moveInput; 
+    private float currentSpeed; // Current actual speed
     private float turnInput;
     private bool isBraking;
     private Keyboard keyboard;
@@ -31,6 +34,7 @@ public class CarController : MonoBehaviour
         rb.centerOfMass = new Vector3(0, -0.5f, 0); // Down the mass center | It's for stability
         
         keyboard = Keyboard.current;
+        currentSpeed = 0f;
     }
 
     void Update()
@@ -79,24 +83,53 @@ public class CarController : MonoBehaviour
     {
         if (isBraking)
         {
-            // Apply braking force
-            rb.linearVelocity = Vector3.Lerp(rb.linearVelocity, Vector3.zero, brakeForce * Time.fixedDeltaTime);
+            // Progressive braking
+            currentSpeed = Mathf.Max(0f, currentSpeed - brakeDeceleration * Time.fixedDeltaTime);
         }
         else
         {
-            // Apply forward movement
-            Vector3 targetVelocity = transform.forward * forwardSpeed;
+            // Accelerate towards max speed
+            currentSpeed = Mathf.Min(forwardSpeed, currentSpeed + acceleration * Time.fixedDeltaTime);
+            
+            // Decelerationvv
+            if (currentSpeed > forwardSpeed)
+            {
+                currentSpeed = Mathf.Max(forwardSpeed, currentSpeed - naturalDeceleration * Time.fixedDeltaTime);
+            }
+        }
+
+        // Stop completely if speed is very low
+        if (currentSpeed < minSpeed)
+        {
+            currentSpeed = 0f;
+            rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+        }
+        else
+        {
+            // Apply the speed in the forward direction
+            Vector3 targetVelocity = transform.forward * currentSpeed;
             rb.linearVelocity = new Vector3(targetVelocity.x, rb.linearVelocity.y, targetVelocity.z);
         }
     }
 
     private void HandleRotation()
     {
-        if (rb.linearVelocity.magnitude > 1f)
+        if (currentSpeed > 1f) // Only turn when moving
         {
             float rotation = turnInput * turnSpeed * Time.fixedDeltaTime;
             Quaternion turnRotation = Quaternion.Euler(0f, rotation, 0f);
             rb.MoveRotation(rb.rotation * turnRotation);
         }
+    }
+
+    // Public getter for current speed (for ui)
+    public float GetCurrentSpeed()
+    {
+        return currentSpeed;
+    }
+
+    public float GetSpeedPercentage()
+    {
+        return currentSpeed / forwardSpeed;
     }
 }
