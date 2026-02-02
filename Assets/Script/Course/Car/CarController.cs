@@ -11,7 +11,7 @@ public class CarController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float forwardSpeed = 20f; // Speed of the car
     [SerializeField] private float turnSpeed = 100f; // Speed when player turns
-    [SerializeField] private float brakeForce = 50f; // Force applied when braking
+    [SerializeField] private float brakeForce = 20f; // Force applied when braking
 
     [Header("Input Settings")]
     [SerializeField] private bool useKeyboardInput = true; // Enable/disable keyboard input
