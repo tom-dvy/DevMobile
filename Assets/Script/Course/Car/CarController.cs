@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 /// <summary>
 /// Put this script on the car GameObject to control its movement.
+/// Supports both keyboard and mobile joystick inputs.
 /// </summary>
 
 [RequireComponent(typeof(Rigidbody))]
@@ -11,22 +12,36 @@ public class CarController : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] private float forwardSpeed = 30f; // Speed of the car
     [SerializeField] private float acceleration = 10f; // How fast the car accelerates
-    [SerializeField] private float turnSpeed = 100f; // Speed when player turns
+    [SerializeField] private float turnSpeed = 70f; // Speed when player turns
     [SerializeField] private float brakeDeceleration = 15f; // Deceleration rate when braking (higher = faster brake)
     [SerializeField] private float naturalDeceleration = 2f; // Slowdown when not accelerating
     [SerializeField] private float minSpeed = 0.1f; // Speed threshold to stop completely
 
     [Header("Input Settings")]
-    [SerializeField] private bool useKeyboardInput = true; // Enable/disable keyboard input
+    [SerializeField] private InputMode inputMode = InputMode.Keyboard;
+    
+    [Header("Keyboard Settings")]
     [SerializeField] private Key leftKey = Key.A; // Key to turn left
     [SerializeField] private Key rightKey = Key.D; // Key to turn right
     [SerializeField] private Key brakeKey = Key.Space; // Key to brake
+
+    [Header("Joystick Settings")]
+    [SerializeField] private VariableJoystick variableJoystick; // Reference to the joystick
+    [SerializeField] private float joystickDeadzone = 0.1f; // Deadzone for joystick input
+    [SerializeField] private UnityEngine.UI.Button brakeButton; // UI button for braking on mobile
 
     private Rigidbody rb;
     private float currentSpeed; // Current actual speed
     private float turnInput;
     private bool isBraking;
     private Keyboard keyboard;
+
+    public enum InputMode
+    {
+        Keyboard,
+        Joystick,
+        Both // Allow both inputs simultaneously
+    }
 
     void Start()
     {
@@ -35,14 +50,33 @@ public class CarController : MonoBehaviour
         
         keyboard = Keyboard.current;
         currentSpeed = 0f;
+
+        // Setup brake button listener if provided
+        if (brakeButton != null)
+        {
+            brakeButton.onClick.AddListener(() => isBraking = true);
+        }
     }
 
     void Update()
     {
-        // Keyboard input handling
-        if (useKeyboardInput && keyboard != null)
+        // Handle inputs based on selected mode
+        switch (inputMode)
         {
-            HandleKeyboardInput();
+            case InputMode.Keyboard:
+                if (keyboard != null)
+                    HandleKeyboardInput();
+                break;
+                
+            case InputMode.Joystick:
+                HandleJoystickInput();
+                break;
+                
+            case InputMode.Both:
+                if (keyboard != null)
+                    HandleKeyboardInput();
+                HandleJoystickInput();
+                break;
         }
     }
 
@@ -50,6 +84,12 @@ public class CarController : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
+        
+        // Reset brake if using button (for next frame)
+        if (brakeButton != null && !brakeButton.gameObject.activeInHierarchy)
+        {
+            isBraking = false;
+        }
     }
 
     private void HandleKeyboardInput()
@@ -72,11 +112,46 @@ public class CarController : MonoBehaviour
         SetInputs(steering, braking);
     }
 
+    private void HandleJoystickInput()
+    {
+        if (variableJoystick == null) return;
+
+        // Get horizontal input from joystick (-1 to 1)
+        float horizontal = variableJoystick.Horizontal;
+
+        // Apply deadzone
+        if (Mathf.Abs(horizontal) < joystickDeadzone)
+        {
+            horizontal = 0f;
+        }
+
+        // Brake input - check if joystick is being pulled down (optional)
+        // Or you can use a separate UI button
+        bool braking = false;
+        if (variableJoystick.Vertical < -0.5f) // Pull down to brake
+        {
+            braking = true;
+        }
+
+        SetInputs(horizontal, braking);
+    }
+
     // Function to set inputs from other scripts (for mobile or keyboard controls)
     public void SetInputs(float steering, bool braking)
     {
         turnInput = steering;
         isBraking = braking;
+    }
+
+    // Called by UI brake button (for mobile)
+    public void OnBrakePressed()
+    {
+        isBraking = true;
+    }
+
+    public void OnBrakeReleased()
+    {
+        isBraking = false;
     }
 
     private void HandleMovement()
@@ -91,7 +166,7 @@ public class CarController : MonoBehaviour
             // Accelerate towards max speed
             currentSpeed = Mathf.Min(forwardSpeed, currentSpeed + acceleration * Time.fixedDeltaTime);
             
-            // Decelerationvv
+            // Natural deceleration
             if (currentSpeed > forwardSpeed)
             {
                 currentSpeed = Mathf.Max(forwardSpeed, currentSpeed - naturalDeceleration * Time.fixedDeltaTime);
@@ -122,7 +197,7 @@ public class CarController : MonoBehaviour
         }
     }
 
-    // Public getter for current speed (for ui)
+    // Public getter for current speed
     public float GetCurrentSpeed()
     {
         return currentSpeed;
@@ -132,4 +207,5 @@ public class CarController : MonoBehaviour
     {
         return currentSpeed / forwardSpeed;
     }
+
 }
