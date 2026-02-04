@@ -51,7 +51,8 @@ MonoBehaviour:
   - {fileID: 8497101592189174596, guid: ddff9539e98a343489e7f0a45acfc069, type: 3}
   - {fileID: 8497101592189174596, guid: d7a552e5dc687c94fbd573d2109825a6, type: 3}
   - {fileID: 5634841649804254144, guid: d6806529a0b390642a1ecd17f4bad79f, type: 3}
-  - {fileID: 8497101592189174596, guid: 1cae79e4fa78f65409bb1aabe57e65c0, type: 3}
+  startSegment: {fileID: 8497101592189174596, guid: 09fa3dba0f680784192797afcde3781b, type: 3}
+  finishSegment: {fileID: 8497101592189174596, guid: 1cae79e4fa78f65409bb1aabe57e65c0, type: 3}
   trackParent: {fileID: 4318208272700645111}
 --- !u!1 &4949316942048724723
 GameObject:

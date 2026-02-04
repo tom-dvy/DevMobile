@@ -116,7 +116,6 @@ public class CarController : MonoBehaviour
     {
         if (variableJoystick == null) return;
 
-        // Get horizontal input from joystick (-1 to 1)
         float horizontal = variableJoystick.Horizontal;
 
         // Apply deadzone
@@ -125,10 +124,8 @@ public class CarController : MonoBehaviour
             horizontal = 0f;
         }
 
-        // Brake input - check if joystick is being pulled down (optional)
-        // Or you can use a separate UI button
         bool braking = false;
-        if (variableJoystick.Vertical < -0.5f) // Pull down to brake
+        if (variableJoystick.Vertical < -0.5f)
         {
             braking = true;
         }

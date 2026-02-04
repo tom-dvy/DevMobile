@@ -20,8 +20,8 @@ public class RaceTimerUI : MonoBehaviour
 
     void Start()
     {
-        raceTimer = FindObjectOfType<RaceTimer>();
-        finishLine = FindObjectOfType<FinishLine>();
+        raceTimer = FindFirstObjectByType<RaceTimer>();
+        finishLine = FindFirstObjectByType<FinishLine>();
         
         if (raceTimer == null)
         {
