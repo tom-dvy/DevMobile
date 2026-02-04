@@ -10,6 +10,13 @@ public class TrackGenerator : MonoBehaviour
     [Header("Segment Prefabs")]
     public List<TrackSegment> availableSegments = new List<TrackSegment>(); // List of segment prefabs
     
+    [Header("Special Segments")]
+    [Tooltip("Segment to use at the start")]
+    public TrackSegment startSegment; // Start segment
+    
+    [Tooltip("Segment to use at the finish")]
+    public TrackSegment finishSegment; // Finish segment
+    
     [Header("Generated Track")]
     public Transform trackParent;
     
@@ -33,14 +40,32 @@ public class TrackGenerator : MonoBehaviour
         currentSpawnPosition = Vector3.zero;
         currentSpawnRotation = Quaternion.identity;
         
-        // Generate segments with TrackSegement
+        // Generate segments
         for (int i = 0; i < numberOfSegments; i++)
         {
-            TrackSegment segmentPrefab = GetRandomSegment();
+            TrackSegment segmentPrefab = GetSegmentForIndex(i);
             SpawnSegment(segmentPrefab, i);
         }
         
         Debug.Log($"Track generated with {generatedSegments.Count} segments using seed: {seed}");
+    }
+
+    private TrackSegment GetSegmentForIndex(int index)
+    {
+        // First segment: use startSegment if assigned
+        if (index == 0 && startSegment != null)
+        {
+            return startSegment;
+        }
+        
+        // Last segment: use finishSegment if assigned
+        if (index == numberOfSegments - 1 && finishSegment != null)
+        {
+            return finishSegment;
+        }
+        
+        // Otherwise, use random segment
+        return GetRandomSegment();
     }
 
     private TrackSegment GetRandomSegment()
@@ -77,13 +102,12 @@ public class TrackGenerator : MonoBehaviour
         
         generatedSegments.Add(newSegment);
         
-        // ypdate spawn position and rotation for next segment
+        // Update spawn position and rotation for next segment
         UpdateSpawnTransform(newSegment);
     }
 
     private void AlignSegment(TrackSegment newSegment, TrackSegment previousSegment)
     {
-
         // Calculate offset between new segment's startPoint and its position
         Vector3 offset = newSegment.transform.position - newSegment.startPoint.position;
         
@@ -116,6 +140,11 @@ public class TrackGenerator : MonoBehaviour
     {
         seed = newSeed;
         GenerateTrack();
+    }
+    
+    public List<TrackSegment> GetGeneratedSegments()
+    {
+        return generatedSegments;
     }
 
     private void OnValidate()

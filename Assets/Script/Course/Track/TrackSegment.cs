@@ -10,6 +10,13 @@ public class TrackSegment : MonoBehaviour
     public string segmentID; // ID of the segment
     public SegmentType type; // Type of segment
     
+    [Header("Special Segment")]
+    [Tooltip("Is this the start segment of the track?")]
+    public bool isStartSegment = false;
+    
+    [Tooltip("Is this the finish segment of the track?")]
+    public bool isFinishSegment = false;
+    
     [Header("Connection Points")]
     public Transform startPoint; // Start point of the segment (where to connect the previous one)
     public Transform endPoint;   // End point of the segment (where to connect the next one)
@@ -18,21 +25,33 @@ public class TrackSegment : MonoBehaviour
     {
         Straight,
         CurveLeft,
-        CurveRight,
-        SharpTurnLeft,
-        SharpTurnRight,
-        Chicane
+        CurveRight
     }
 
     private void OnDrawGizmos()
     {
-        // Visualisation dans l'éditeur
+        // Visualisation in editor - For easy debugging
         if (startPoint != null && endPoint != null)
         {
-            Gizmos.color = Color.green;
+            // Change color based on segment type
+            if (isStartSegment)
+            {
+                Gizmos.color = Color.cyan;
+            }
+            else if (isFinishSegment)
+            {
+                Gizmos.color = Color.magenta;
+            }
+            else
+            {
+                Gizmos.color = Color.green;
+            }
+            
             Gizmos.DrawSphere(startPoint.position, 2f);
+            
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(endPoint.position, 2f);
+            
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(startPoint.position, endPoint.position);
         }
