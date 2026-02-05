@@ -12,8 +12,6 @@ public class RaceTimerUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI bestLapText;
     [SerializeField] private TextMeshProUGUI lapCounterText;
     
-    [Header("Settings")]
-    [SerializeField] private bool showMilliseconds = true;
 
     private RaceTimer raceTimer;
     private FinishLine finishLine;

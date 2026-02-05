@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Put this script on the car GameObject to control its movement.
@@ -19,7 +21,7 @@ public class CarController : MonoBehaviour
 
     [Header("Input Settings")]
     [SerializeField] private InputMode inputMode = InputMode.Keyboard;
-    
+
     [Header("Keyboard Settings")]
     [SerializeField] private Key leftKey = Key.A; // Key to turn left
     [SerializeField] private Key rightKey = Key.D; // Key to turn right
@@ -28,12 +30,20 @@ public class CarController : MonoBehaviour
     [Header("Joystick Settings")]
     [SerializeField] private VariableJoystick variableJoystick; // Reference to the joystick
     [SerializeField] private float joystickDeadzone = 0.1f; // Deadzone for joystick input
-    [SerializeField] private UnityEngine.UI.Button brakeButton; // UI button for braking on mobile
 
+    [Header("Brake Button")]
+    [SerializeField] private GameObject brakeButtonObject; // Drag the button GameObject here
+
+    [Header("Item Settings")]
+    [SerializeField] private Key useItemKey = Key.E; // Key to use item
+    [SerializeField] private GameObject itemUseButton; // Mobile button for item use
+
+    private ItemInventory itemInventory;
     private Rigidbody rb;
     private float currentSpeed; // Current actual speed
     private float turnInput;
     private bool isBraking;
+    private bool uiBrakeActive = false; // Track UI button brake state
     private Keyboard keyboard;
 
     public enum InputMode
@@ -47,15 +57,64 @@ public class CarController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0); // Down the mass center | It's for stability
-        
+
         keyboard = Keyboard.current;
         currentSpeed = 0f;
 
-        // Setup brake button listener if provided
-        if (brakeButton != null)
+        itemInventory = GetComponent<ItemInventory>();
+
+        // Setup item button
+        SetupItemButton();
+
+        // Setup brake button automatically
+        SetupBrakeButton();
+    }
+
+    private void SetupItemButton()
+    {
+        if (itemUseButton == null) return;
+
+        EventTrigger trigger = itemUseButton.GetComponent<EventTrigger>();
+        if (trigger == null)
         {
-            brakeButton.onClick.AddListener(() => isBraking = true);
+            trigger = itemUseButton.AddComponent<EventTrigger>();
         }
+
+        trigger.triggers.Clear();
+
+        EventTrigger.Entry pointerDownEntry = new EventTrigger.Entry();
+        pointerDownEntry.eventID = EventTriggerType.PointerDown;
+        pointerDownEntry.callback.AddListener((data) => { UseItem(); });
+        trigger.triggers.Add(pointerDownEntry);
+    }
+
+    private void SetupBrakeButton()
+    {
+        if (brakeButtonObject == null) return;
+
+        // Get or add EventTrigger component
+        EventTrigger trigger = brakeButtonObject.GetComponent<EventTrigger>();
+        if (trigger == null)
+        {
+            trigger = brakeButtonObject.AddComponent<EventTrigger>();
+        }
+
+        // Clear existing entries
+        trigger.triggers.Clear();
+
+        // Add PointerDown event (when button is pressed)
+        EventTrigger.Entry pointerDownEntry = new EventTrigger.Entry();
+        pointerDownEntry.eventID = EventTriggerType.PointerDown;
+        pointerDownEntry.callback.AddListener((data) => { OnBrakePressed(); });
+        trigger.triggers.Add(pointerDownEntry);
+
+        // Add PointerUp event (when button is released)
+        EventTrigger.Entry pointerUpEntry = new EventTrigger.Entry();
+        pointerUpEntry.eventID = EventTriggerType.PointerUp;
+        pointerUpEntry.callback.AddListener((data) => { OnBrakeReleased(); });
+        trigger.triggers.Add(pointerUpEntry);
+
+        Debug.Log("Brake button configured successfully!");
     }
 
     void Update()
@@ -67,16 +126,21 @@ public class CarController : MonoBehaviour
                 if (keyboard != null)
                     HandleKeyboardInput();
                 break;
-                
+
             case InputMode.Joystick:
                 HandleJoystickInput();
                 break;
-                
+
             case InputMode.Both:
                 if (keyboard != null)
                     HandleKeyboardInput();
                 HandleJoystickInput();
                 break;
+
+                if (keyboard != null && keyboard[useItemKey].wasPressedThisFrame)
+                {
+                    UseItem();
+                }
         }
     }
 
@@ -84,12 +148,6 @@ public class CarController : MonoBehaviour
     {
         HandleMovement();
         HandleRotation();
-        
-        // Reset brake if using button (for next frame)
-        if (brakeButton != null && !brakeButton.gameObject.activeInHierarchy)
-        {
-            isBraking = false;
-        }
     }
 
     private void HandleKeyboardInput()
@@ -106,8 +164,8 @@ public class CarController : MonoBehaviour
             steering += 1f;
         }
 
-        // Brake input
-        bool braking = keyboard[brakeKey].isPressed;
+        // Brake input (keyboard or UI button)
+        bool braking = keyboard[brakeKey].isPressed || uiBrakeActive;
 
         SetInputs(steering, braking);
     }
@@ -124,8 +182,10 @@ public class CarController : MonoBehaviour
             horizontal = 0f;
         }
 
-        bool braking = false;
-        if (variableJoystick.Vertical < -0.5f)
+        // Combine UI button brake with joystick vertical brake
+        bool braking = uiBrakeActive; // Start with UI button state
+
+        if (variableJoystick.Vertical < -0.5f) // Joystick pulled down
         {
             braking = true;
         }
@@ -140,15 +200,18 @@ public class CarController : MonoBehaviour
         isBraking = braking;
     }
 
-    // Called by UI brake button (for mobile)
+    // Called when brake button is pressed (hold)
     public void OnBrakePressed()
     {
-        isBraking = true;
+        Debug.Log("Brake button PRESSED");
+        uiBrakeActive = true;
     }
 
+    // Called when brake button is released
     public void OnBrakeReleased()
     {
-        isBraking = false;
+        Debug.Log("Brake button RELEASED");
+        uiBrakeActive = false;
     }
 
     private void HandleMovement()
@@ -162,7 +225,7 @@ public class CarController : MonoBehaviour
         {
             // Accelerate towards max speed
             currentSpeed = Mathf.Min(forwardSpeed, currentSpeed + acceleration * Time.fixedDeltaTime);
-            
+
             // Natural deceleration
             if (currentSpeed > forwardSpeed)
             {
@@ -194,6 +257,14 @@ public class CarController : MonoBehaviour
         }
     }
 
+    private void UseItem()
+    {
+        if (itemInventory != null)
+        {
+            itemInventory.UseItem();
+        }
+    }
+
     // Public getter for current speed
     public float GetCurrentSpeed()
     {
@@ -204,5 +275,4 @@ public class CarController : MonoBehaviour
     {
         return currentSpeed / forwardSpeed;
     }
-
 }
