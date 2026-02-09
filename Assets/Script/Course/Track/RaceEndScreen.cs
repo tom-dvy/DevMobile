@@ -5,147 +5,56 @@ public class RaceEndScreen : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject endScreenPanel;
+    [SerializeField] private GameObject mobileControlsHUD; // <--- AJOUTE CECI
     [SerializeField] private TextMeshProUGUI finalTimeText;
     [SerializeField] private TextMeshProUGUI bestLapText;
-    [SerializeField] private TextMeshProUGUI messageText;
     
     private RaceTimer raceTimer;
     private CarController carController;
-    private bool isSubscribed = false;
-    private int subscriptionAttempts = 0;
 
-    void Start()
+    void Awake()
     {
-        Debug.Log("RaceEndScreen: Start");
-        
-        if (endScreenPanel != null)
-        {
-            endScreenPanel.SetActive(false);
-            Debug.Log("End screen panel hidden");
-        }
-        else
-        {
-            Debug.LogError("End screen panel is NULL!");
-        }
-        
-        FindReferences();
+        raceTimer = FindFirstObjectByType<RaceTimer>();
+        carController = FindFirstObjectByType<CarController>();
     }
 
-    void Update()
+    void OnEnable()
     {
-        if (!isSubscribed && subscriptionAttempts < 100)
-        {
-            TrySubscribeToFinishLine();
-            subscriptionAttempts++;
-        }
+        if (raceTimer != null)
+            raceTimer.onRaceComplete.AddListener(ShowEndScreen);
     }
 
-    private void FindReferences()
+    void OnDisable()
     {
-        if (raceTimer == null)
-        {
-            raceTimer = FindFirstObjectByType<RaceTimer>();
-            if (raceTimer != null)
-            {
-                Debug.Log("RaceTimer found!");
-            }
-            else
-            {
-                Debug.LogWarning("RaceTimer NOT found!");
-            }
-        }
-        
-        if (carController == null)
-        {
-            carController = FindFirstObjectByType<CarController>();
-            if (carController != null)
-            {
-                Debug.Log("CarController found!");
-            }
-            else
-            {
-                Debug.LogWarning("CarController NOT found!");
-            }
-        }
-    }
-
-    private void TrySubscribeToFinishLine()
-    {
-        FinishLine[] finishLines = FindObjectsByType<FinishLine>(FindObjectsSortMode.None);
-        
-        if (finishLines.Length > 0)
-        {
-            Debug.Log($"Found {finishLines.Length} FinishLine(s)");
-            
-            foreach (FinishLine line in finishLines)
-            {
-                // Remove any existing listener first to avoid duplicates
-                line.onRaceComplete.RemoveListener(OnRaceComplete);
-                // Add listener
-                line.onRaceComplete.AddListener(OnRaceComplete);
-                
-                Debug.Log($"Subscribed to FinishLine on {line.gameObject.name}");
-            }
-            
-            isSubscribed = true;
-        }
-    }
-
-    private void OnRaceComplete(float totalTime, int laps)
-    {
-        Debug.Log($"OnRaceComplete called! Time: {totalTime:F2}s, Laps: {laps}");
-        ShowEndScreen(totalTime, laps);
+        if (raceTimer != null)
+            raceTimer.onRaceComplete.RemoveListener(ShowEndScreen);
     }
 
     private void ShowEndScreen(float totalTime, int laps)
     {
-        Debug.Log("ShowEndScreen called");
+        // 1. On affiche l'écran de fin
+        if (endScreenPanel != null) endScreenPanel.SetActive(true);
         
-        if (endScreenPanel != null)
-        {
-            endScreenPanel.SetActive(true);
-            Debug.Log("End screen panel activated!");
-        }
-        else
-        {
-            Debug.LogError("Cannot show end screen - panel is NULL!");
-        }
-        
+        // 2. ON CACHE LES CONTRÔLES MOBILES <--- LOGIQUE ICI
+        if (mobileControlsHUD != null) mobileControlsHUD.SetActive(false);
+
+        // 3. On remplit les textes
         if (finalTimeText != null)
-        {
-            finalTimeText.text = $"Final Time: {RaceTimer.FormatTime(totalTime)}";
-        }
-        
-        if (bestLapText != null && raceTimer != null)
-        {
-            float bestLap = raceTimer.GetBestLapTime();
-            if (bestLap > 0)
-            {
-                bestLapText.text = $"Best Lap: {RaceTimer.FormatTime(bestLap)}";
-            }
-        }
-        
-        if (messageText != null)
-        {
-            messageText.text = "Race Complete!";
-        }
-        
-        if (carController != null)
-        {
-            carController.enabled = false;
-            Debug.Log("Car disabled");
-        }
+            finalTimeText.text = $"Total Time: {RaceTimer.FormatTime(totalTime)}";
+            
+        if (bestLapText != null)
+            bestLapText.text = $"Best Lap: {RaceTimer.FormatTime(raceTimer.GetBestLapTime())}";
+
+        // 4. On coupe la physique de la voiture
+        if (carController != null) carController.enabled = false;
     }
 
-    public void RestartRace()
+    public void RestartRace() 
     {
+        // Pas besoin de réactiver le HUD ici, car le chargement de scène 
+        // remet tout à l'état initial de ton Prefab/Scène.
         UnityEngine.SceneManagement.SceneManager.LoadScene(
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
         );
-    }
-
-    public void QuitToMenu()
-    {
-        Debug.Log("Quit to menu");
     }
 }

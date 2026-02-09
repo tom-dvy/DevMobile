@@ -207,7 +207,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9d69acf6573ca5468c2dd7f589f4e47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FinishLine
-  isStartLine: 1
+  isStartLine: 0
   requiredLaps: 1
   onRaceStart:
     m_PersistentCalls:
