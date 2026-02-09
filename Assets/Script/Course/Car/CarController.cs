@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 /// <summary>
@@ -21,7 +20,7 @@ public class CarController : MonoBehaviour
 
     [Header("Input Settings")]
     [SerializeField] private InputMode inputMode = InputMode.Keyboard;
-
+    
     [Header("Keyboard Settings")]
     [SerializeField] private Key leftKey = Key.A; // Key to turn left
     [SerializeField] private Key rightKey = Key.D; // Key to turn right
@@ -30,15 +29,10 @@ public class CarController : MonoBehaviour
     [Header("Joystick Settings")]
     [SerializeField] private VariableJoystick variableJoystick; // Reference to the joystick
     [SerializeField] private float joystickDeadzone = 0.1f; // Deadzone for joystick input
-
-    [Header("Brake Button")]
+    
+    [Header("Brake Button (Mobile)")]
     [SerializeField] private GameObject brakeButtonObject; // Drag the button GameObject here
 
-    [Header("Item Settings")]
-    [SerializeField] private Key useItemKey = Key.E; // Key to use item
-    [SerializeField] private GameObject itemUseButton; // Mobile button for item use
-
-    private ItemInventory itemInventory;
     private Rigidbody rb;
     private float currentSpeed; // Current actual speed
     private float turnInput;
@@ -57,35 +51,12 @@ public class CarController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.centerOfMass = new Vector3(0, -0.5f, 0); // Down the mass center | It's for stability
-
+        
         keyboard = Keyboard.current;
         currentSpeed = 0f;
 
-        itemInventory = GetComponent<ItemInventory>();
-
-        // Setup item button
-        SetupItemButton();
-
         // Setup brake button automatically
         SetupBrakeButton();
-    }
-
-    private void SetupItemButton()
-    {
-        if (itemUseButton == null) return;
-
-        EventTrigger trigger = itemUseButton.GetComponent<EventTrigger>();
-        if (trigger == null)
-        {
-            trigger = itemUseButton.AddComponent<EventTrigger>();
-        }
-
-        trigger.triggers.Clear();
-
-        EventTrigger.Entry pointerDownEntry = new EventTrigger.Entry();
-        pointerDownEntry.eventID = EventTriggerType.PointerDown;
-        pointerDownEntry.callback.AddListener((data) => { UseItem(); });
-        trigger.triggers.Add(pointerDownEntry);
     }
 
     private void SetupBrakeButton()
@@ -126,21 +97,16 @@ public class CarController : MonoBehaviour
                 if (keyboard != null)
                     HandleKeyboardInput();
                 break;
-
+                
             case InputMode.Joystick:
                 HandleJoystickInput();
                 break;
-
+                
             case InputMode.Both:
                 if (keyboard != null)
                     HandleKeyboardInput();
                 HandleJoystickInput();
                 break;
-
-                if (keyboard != null && keyboard[useItemKey].wasPressedThisFrame)
-                {
-                    UseItem();
-                }
         }
     }
 
@@ -184,7 +150,7 @@ public class CarController : MonoBehaviour
 
         // Combine UI button brake with joystick vertical brake
         bool braking = uiBrakeActive; // Start with UI button state
-
+        
         if (variableJoystick.Vertical < -0.5f) // Joystick pulled down
         {
             braking = true;
@@ -225,7 +191,7 @@ public class CarController : MonoBehaviour
         {
             // Accelerate towards max speed
             currentSpeed = Mathf.Min(forwardSpeed, currentSpeed + acceleration * Time.fixedDeltaTime);
-
+            
             // Natural deceleration
             if (currentSpeed > forwardSpeed)
             {
@@ -254,14 +220,6 @@ public class CarController : MonoBehaviour
             float rotation = turnInput * turnSpeed * Time.fixedDeltaTime;
             Quaternion turnRotation = Quaternion.Euler(0f, rotation, 0f);
             rb.MoveRotation(rb.rotation * turnRotation);
-        }
-    }
-
-    private void UseItem()
-    {
-        if (itemInventory != null)
-        {
-            itemInventory.UseItem();
         }
     }
 

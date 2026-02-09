@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4873867665379956338}
   - component: {fileID: 3988674642969447926}
+  - component: {fileID: 9150438450511623318}
   m_Layer: 0
   m_Name: RaceManager
   m_TagString: Untagged
@@ -45,3 +46,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaceTimer
   isRunning: 0
+--- !u!114 &9150438450511623318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3887705947340633966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65b8d484e3a823b4e83310bce9b475a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RaceCountdown
+  countdownDuration: 3
+  startOnLoad: 1
+  countdownText: {fileID: 0}
+  countdownPanel: {fileID: 0}
+  carController: {fileID: 0}
+  countdownBeep: {fileID: 0}
+  goSound: {fileID: 0}
