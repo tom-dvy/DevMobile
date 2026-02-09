@@ -3,60 +3,63 @@ using TMPro;
 using System.Collections;
 
 /// <summary>
-/// Countdown before race starts
+/// Displays and manages a countdown before the race starts
+/// Disables car control during the countdown, then enables it when finished
+/// Supports UI text, panel display, and optional audio feedback
 /// </summary>
 public class RaceCountdown : MonoBehaviour
 {
     [Header("Countdown Settings")]
-    [SerializeField] private float countdownDuration = 3f;
-    [SerializeField] private bool startOnLoad = true;
-    
+    [SerializeField] private float countdownDuration = 3f; // Countdown length in seconds
+    [SerializeField] private bool startOnLoad = true;       // Start countdown automatically on scene load
+
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI countdownText;
-    [SerializeField] private GameObject countdownPanel;
-    
+    [SerializeField] private TextMeshProUGUI countdownText; // Text displaying countdown numbers
+    [SerializeField] private GameObject countdownPanel;     // Panel containing countdown UI
+
     [Header("Car Reference")]
-    [SerializeField] private CarController carController; // Reference to car to disable/enable
-    
+    [SerializeField] private CarController carController;   // Car to disable/enable during countdown
+
     [Header("Audio (Optional)")]
-    [SerializeField] private AudioClip countdownBeep;
-    [SerializeField] private AudioClip goSound;
-    
+    [SerializeField] private AudioClip countdownBeep; // Sound played each second
+    [SerializeField] private AudioClip goSound;        // Sound played at "GO!"
+
     private bool countdownFinished = false;
     private AudioSource audioSource;
 
-    void Start()
+    private void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        
+
         if (startOnLoad)
         {
             StartCountdown();
         }
     }
 
+    // Starts the countdown if it has not already been completed
     public void StartCountdown()
     {
         if (countdownFinished) return;
-        
+
         StartCoroutine(CountdownRoutine());
     }
 
     private IEnumerator CountdownRoutine()
     {
-        // Disable car movement during countdown
+        // Disable car control during countdown
         if (carController != null)
         {
             carController.enabled = false;
         }
-        
-        // Show countdown panel
+
+        // Show countdown UI
         if (countdownPanel != null)
         {
             countdownPanel.SetActive(true);
         }
-        
-        // Countdown: 3, 2, 1
+
+        // Countdown sequence: 3, 2, 1...
         for (int i = (int)countdownDuration; i > 0; i--)
         {
             if (countdownText != null)
@@ -64,47 +67,49 @@ public class RaceCountdown : MonoBehaviour
                 countdownText.text = i.ToString();
                 countdownText.fontSize = 120;
             }
-            
-            // Play beep sound
+
+            // Play countdown beep
             if (audioSource != null && countdownBeep != null)
             {
                 audioSource.PlayOneShot(countdownBeep);
             }
-            
-            Debug.Log($"Countdown: {i}");
+
             yield return new WaitForSeconds(1f);
         }
-        
-        // GO!
+
+        // Display "GO!"
         if (countdownText != null)
         {
             countdownText.text = "GO!";
             countdownText.fontSize = 150;
         }
-        
-        // Play GO sound
+
+        // Play start sound
         if (audioSource != null && goSound != null)
         {
             audioSource.PlayOneShot(goSound);
         }
-        
-        Debug.Log("GO!");
+
         yield return new WaitForSeconds(1f);
-        
-        // Hide countdown
+
+        // Hide countdown UI
         if (countdownPanel != null)
         {
             countdownPanel.SetActive(false);
         }
-        
-        // Enable car movement
+
+        // Re-enable car control
         if (carController != null)
         {
             carController.enabled = true;
         }
-        
+
         countdownFinished = true;
     }
 
-    public bool IsCountdownFinished() => countdownFinished;
+    // Returns true once the countdown has fully completed
+    public bool IsCountdownFinished()
+    {
+        return countdownFinished;
+    }
 }

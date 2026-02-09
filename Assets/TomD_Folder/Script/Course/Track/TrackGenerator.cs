@@ -1,70 +1,69 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Procedurally generates a racetrack by spawning and aligning track segments.
+/// Supports seeded random generation, start and finish segments,
+/// and automatic alignment using segment start/end points.
+/// </summary>
 public class TrackGenerator : MonoBehaviour
 {
     [Header("Track Settings")]
-    public int numberOfSegments = 10; // Number of segments to generate
-    public int seed = 12345; // for random generation
-    
-    [Header("Segment Prefabs")]
-    public List<TrackSegment> availableSegments = new List<TrackSegment>(); // List of segment prefabs
-    
-    [Header("Special Segments")]
-    [Tooltip("Segment to use at the start")]
-    public TrackSegment startSegment; // Start segment
-    
-    [Tooltip("Segment to use at the finish")]
-    public TrackSegment finishSegment; // Finish segment
-    
-    [Header("Generated Track")]
-    public Transform trackParent;
-    
-    private List<TrackSegment> generatedSegments = new List<TrackSegment>(); // List of spawned segments
-    private Vector3 currentSpawnPosition; // Position for next segment
-    private Quaternion currentSpawnRotation; // Orientation for next segment
+    public int numberOfSegments = 10; // Total number of segments to generate
+    public int seed = 12345;          // Seed for deterministic random generation
 
-    void Start()
+    [Header("Segment Prefabs")]
+    public List<TrackSegment> availableSegments = new List<TrackSegment>(); // Pool of random segments
+
+    [Header("Special Segments")]
+    [Tooltip("Segment used at the beginning of the track")]
+    public TrackSegment startSegment;
+
+    [Tooltip("Segment used at the end of the track")]
+    public TrackSegment finishSegment;
+
+    [Header("Generated Track")]
+    public Transform trackParent; // Parent transform for spawned segments
+
+    private readonly List<TrackSegment> generatedSegments = new List<TrackSegment>();
+    private Vector3 currentSpawnPosition;
+    private Quaternion currentSpawnRotation;
+
+    private void Start()
     {
         GenerateTrack();
     }
 
     public void GenerateTrack()
     {
-        // Remove previous track
+        // Remove previously generated segments
         ClearTrack();
-        
-        // Initialize random with seed
+
+        // Initialize random generator
         Random.InitState(seed);
-        
+
         currentSpawnPosition = Vector3.zero;
         currentSpawnRotation = Quaternion.identity;
-        
-        // Generate segments
+
+        // Spawn all segments
         for (int i = 0; i < numberOfSegments; i++)
         {
             TrackSegment segmentPrefab = GetSegmentForIndex(i);
             SpawnSegment(segmentPrefab, i);
         }
-        
-        Debug.Log($"Track generated with {generatedSegments.Count} segments using seed: {seed}");
     }
 
     private TrackSegment GetSegmentForIndex(int index)
     {
-        // First segment: use startSegment if assigned
+        // First segment
         if (index == 0 && startSegment != null)
-        {
             return startSegment;
-        }
-        
-        // Last segment: use finishSegment if assigned
+
+        // Last segment
         if (index == numberOfSegments - 1 && finishSegment != null)
-        {
             return finishSegment;
-        }
-        
-        // Otherwise, use random segment
+
+        // Random segment
         return GetRandomSegment();
     }
 
@@ -72,10 +71,10 @@ public class TrackGenerator : MonoBehaviour
     {
         if (availableSegments.Count == 0)
         {
-            Debug.LogError("No available segments! Add segment prefabs to the list.");
+            Debug.LogError("No available track segments assigned.");
             return null;
         }
-        
+
         int randomIndex = Random.Range(0, availableSegments.Count);
         return availableSegments[randomIndex];
     }
@@ -83,40 +82,43 @@ public class TrackGenerator : MonoBehaviour
     private void SpawnSegment(TrackSegment segmentPrefab, int segmentIndex)
     {
         if (segmentPrefab == null) return;
-        
+
         TrackSegment newSegment = Instantiate(segmentPrefab, trackParent);
         newSegment.name = $"Segment_{segmentIndex}_{segmentPrefab.type}";
-        
+
         if (generatedSegments.Count == 0)
         {
-            // first segment, place at origin
+            // First segment is placed at origin
             newSegment.transform.position = currentSpawnPosition;
             newSegment.transform.rotation = currentSpawnRotation;
         }
         else
         {
-            // Align the startPoint of the new segment with the endPoint of the last segment
-            TrackSegment previousSegment = generatedSegments[generatedSegments.Count - 1];
+            // Align new segment with the previous one
+            TrackSegment previousSegment = generatedSegments[^1];
             AlignSegment(newSegment, previousSegment);
         }
-        
+
         generatedSegments.Add(newSegment);
-        
-        // Update spawn position and rotation for next segment
+
+        // Update transform for next spawn
         UpdateSpawnTransform(newSegment);
     }
 
     private void AlignSegment(TrackSegment newSegment, TrackSegment previousSegment)
     {
-        // Calculate offset between new segment's startPoint and its position
+        // Calculate positional offset from the start point
         Vector3 offset = newSegment.transform.position - newSegment.startPoint.position;
-        
-        // Align segment position
+
+        // Align position
         newSegment.transform.position = previousSegment.endPoint.position + offset;
-        
+
         // Align rotation
-        Quaternion rotationDifference = Quaternion.Inverse(newSegment.startPoint.rotation) * newSegment.transform.rotation;
-        newSegment.transform.rotation = previousSegment.endPoint.rotation * rotationDifference;
+        Quaternion rotationOffset =
+            Quaternion.Inverse(newSegment.startPoint.rotation) * newSegment.transform.rotation;
+
+        newSegment.transform.rotation =
+            previousSegment.endPoint.rotation * rotationOffset;
     }
 
     private void UpdateSpawnTransform(TrackSegment segment)
@@ -130,18 +132,22 @@ public class TrackGenerator : MonoBehaviour
         foreach (TrackSegment segment in generatedSegments)
         {
             if (segment != null)
+            {
                 Destroy(segment.gameObject);
+            }
         }
+
         generatedSegments.Clear();
     }
 
-    // to regenerate track with a new seed
+    // Regenerates the track using a new seed value
     public void RegenerateWithSeed(int newSeed)
     {
         seed = newSeed;
         GenerateTrack();
     }
-    
+
+    // Returns the list of generated segments
     public List<TrackSegment> GetGeneratedSegments()
     {
         return generatedSegments;
@@ -149,11 +155,12 @@ public class TrackGenerator : MonoBehaviour
 
     private void OnValidate()
     {
+        // Automatically create a parent object if none is assigned
         if (trackParent == null)
         {
             GameObject parent = new GameObject("GeneratedTrack");
+            parent.transform.SetParent(transform);
             trackParent = parent.transform;
-            trackParent.SetParent(transform);
         }
     }
 }
