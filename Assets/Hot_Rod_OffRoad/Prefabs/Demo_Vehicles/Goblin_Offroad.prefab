@@ -446,6 +446,7 @@ GameObject:
   - component: {fileID: 7764497432932038160}
   - component: {fileID: 306175597181271506}
   - component: {fileID: 4578265475847392742}
+  - component: {fileID: 8658157640981431684}
   m_Layer: 0
   m_Name: Goblin_Offroad
   m_TagString: Untagged
@@ -535,7 +536,6 @@ MonoBehaviour:
   acceleration: 10
   turnSpeed: 70
   brakeDeceleration: 15
-  naturalDeceleration: 2
   minSpeed: 0.1
   inputMode: 0
   leftKey: 15
@@ -543,7 +543,35 @@ MonoBehaviour:
   brakeKey: 51
   variableJoystick: {fileID: 0}
   joystickDeadzone: 0.1
-  brakeButton: {fileID: 0}
+  brakeButtonObject: {fileID: 0}
+--- !u!114 &8658157640981431684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862819451959504845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06dfd21d85c5e3742bcd6ab7f182b971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarInventory
+  currentItem: {fileID: 0}
+  OnItemChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5601279091611961538
 GameObject:
   m_ObjectHideFlags: 0

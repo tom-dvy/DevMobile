@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using System.Collections; 
 
 /// <summary>
 /// Controls car movement and rotation.
@@ -38,6 +39,7 @@ public class CarController : MonoBehaviour
     private float turnInput;      // Steering input (-1 to 1)
     private bool isBraking;       // Final braking state
     private bool uiBrakeActive;   // UI brake button state
+    private bool isBoosting;      // Pour savoir si on est en boost
 
     public enum InputMode
     {
@@ -119,55 +121,30 @@ public class CarController : MonoBehaviour
     private void HandleKeyboardInput()
     {
         float steering = 0f;
-
-        if (keyboard[leftKey].isPressed)
-            steering -= 1f;
-
-        if (keyboard[rightKey].isPressed)
-            steering += 1f;
-
+        if (keyboard[leftKey].isPressed) steering -= 1f;
+        if (keyboard[rightKey].isPressed) steering += 1f;
         bool braking = keyboard[brakeKey].isPressed || uiBrakeActive;
-
         SetInputs(steering, braking);
     }
 
     private void HandleJoystickInput()
     {
         if (variableJoystick == null) return;
-
         float horizontal = variableJoystick.Horizontal;
-
-        // Apply deadzone
-        if (Mathf.Abs(horizontal) < joystickDeadzone)
-            horizontal = 0f;
-
+        if (Mathf.Abs(horizontal) < joystickDeadzone) horizontal = 0f;
         bool braking = uiBrakeActive;
-
-        // Pulling joystick down triggers braking
-        if (variableJoystick.Vertical < -0.5f)
-            braking = true;
-
+        if (variableJoystick.Vertical < -0.5f) braking = true;
         SetInputs(horizontal, braking);
     }
 
-    // Receives steering and braking input from any input source
     public void SetInputs(float steering, bool braking)
     {
         turnInput = steering;
         isBraking = braking;
     }
 
-    // Called while the brake button is held
-    public void OnBrakePressed()
-    {
-        uiBrakeActive = true;
-    }
-
-    // Called when the brake button is released
-    public void OnBrakeReleased()
-    {
-        uiBrakeActive = false;
-    }
+    public void OnBrakePressed() => uiBrakeActive = true;
+    public void OnBrakeReleased() => uiBrakeActive = false;
 
     private void HandleMovement()
     {
@@ -183,7 +160,7 @@ public class CarController : MonoBehaviour
         }
 
         // Stop completely if speed is very low
-        if (currentSpeed < minSpeed)
+        if (currentSpeed < minSpeed && !isBoosting)
         {
             currentSpeed = 0f;
             rb.linearVelocity = new Vector3(0f, rb.linearVelocity.y, 0f);
@@ -196,23 +173,42 @@ public class CarController : MonoBehaviour
 
     private void HandleRotation()
     {
-        // Only allow steering when the car is moving
         if (currentSpeed <= 1f) return;
-
         float rotation = turnInput * turnSpeed * Time.fixedDeltaTime;
         Quaternion turnRotation = Quaternion.Euler(0f, rotation, 0f);
         rb.MoveRotation(rb.rotation * turnRotation);
     }
 
-    // Returns the current speed value
-    public float GetCurrentSpeed()
+    public float GetCurrentSpeed() => currentSpeed;
+    public float GetSpeedPercentage() => currentSpeed / forwardSpeed;
+
+
+    public void ApplySpeedBoost(float boostAmount, float duration)
     {
-        return currentSpeed;
+        StopCoroutine("BoostRoutine");
+        StartCoroutine(BoostRoutine(boostAmount, duration));
     }
 
-    // Returns speed normalized between 0 and 1
-    public float GetSpeedPercentage()
+    private IEnumerator BoostRoutine(float amount, float duration)
     {
-        return currentSpeed / forwardSpeed;
+        isBoosting = true;
+        
+        float originalMaxSpeed = forwardSpeed;
+        float originalAcceleration = acceleration;
+
+   
+        forwardSpeed += amount; 
+        
+        acceleration *= 2f; 
+
+        currentSpeed += amount;
+
+        yield return new WaitForSeconds(duration);
+
+        forwardSpeed = originalMaxSpeed;
+        acceleration = originalAcceleration;
+        
+        isBoosting = false;
+        // Debug.Log("Fin du Boost");
     }
 }
