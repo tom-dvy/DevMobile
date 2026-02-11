@@ -26,6 +26,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     [SerializeField] string _iOSRewardedAdUnitId;
     [SerializeField] string _androidRewardedAdUnitId;
     bool isRewardedAd = false;
+    public RewardManager rewardManager {get; private set;}
 
     private string _adUnitId;
 
@@ -43,13 +44,13 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
             return;
         }
         instance = this;
-        
     }
 
     void Start()
     {
         //Initialization must be completed before calling any advertisements !!
         InitializeAds();
+        rewardManager = GetComponentInChildren<RewardManager>();
     }
 
 
@@ -139,7 +140,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 
     /// <summary>
     ///Summon an Interstitial ad.
-    /// <para>Use with adsManager.BannerAds() (You need "AdsManager adsManager = AdsManager.instance;")</para>
+    /// <para>Use with adsManager.RewardedAd() (You need "AdsManager adsManager = AdsManager.instance;")</para>
     /// </summary>
     public void InterstitialAd()
     {
@@ -161,8 +162,8 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 
     /// <summary>
     /// Summon a Rewarded ad;
-    /// <para>Use with adsManager.BannerAds() (You need "AdsManager adsManager = AdsManager.instance;")</para>
-    /// <para>Put a function in _callbackOnRewaredAdsViewed that give the reward you want.</para>
+    /// <para>Use with adsManager.RewardedAd() (You need "AdsManager adsManager = AdsManager.instance;")</para>
+    /// <para>Put a function in _callbackOnRewaredAdsViewed that give the reward you want. You can use adsManager.rewardManager.*Function()*</para>
     /// </summary>
     public void RewardedAd(Action _callbackOnRewaredAdsViewed)
     {

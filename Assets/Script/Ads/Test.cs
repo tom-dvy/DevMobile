@@ -3,10 +3,11 @@ using UnityEngine.Advertisements;
 
 public class Test : MonoBehaviour
 {
-
-    void Start()
+    AdsManager adsManager;
+    async void Start()
     {
-        AdsManager adsManager = AdsManager.instance;
-        adsManager.BannerAd(BannerPosition.BOTTOM_RIGHT, 10f);
+        adsManager = AdsManager.instance;
+        await Awaitable.WaitForSecondsAsync(5f);
+        adsManager.RewardedAd(adsManager.rewardManager.ExampleReward);
     }
 }
