@@ -44,8 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8959671a7db5d5448b06d73beeb6d95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
-  _androidGameId: 
-  _iOSGameId: 
+  _androidGameId: 6038399
+  _iOSGameId: 6038398
   _testMode: 1
-  _iOSAdUnitId: 
-  _androidAdUnitId: 
+  _iOSBannerAdUnitId: Banner_iOS
+  _androidBannerAdUnitId: Banner_Android
+  _iOSInterstitialAdUnitId: Interstitial_iOS
+  _androidInterstitialAdUnitId: Interstitial_Android
+  _iOSRewardedAdUnitId: Rewarded_iOS
+  _androidRewardedAdUnitId: Rewarded_Android

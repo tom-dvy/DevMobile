@@ -1,3 +1,5 @@
+using System;
+using Mono.Cecil.Cil;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -11,12 +13,24 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     [SerializeField] string _iOSGameId;
     [SerializeField] bool _testMode = true;
     private string _gameId;
+    bool isInitialisationFinish = false;
 
+    [Header("Ads")]
     [Header("Banner Ads")]
-    //[SerializeField] BannerPosition _bannerPosition = BannerPosition.BOTTOM_CENTER;
-    [SerializeField] string _iOSAdUnitId;
-    [SerializeField] string _androidAdUnitId;
+    [SerializeField] string _iOSBannerAdUnitId;
+    [SerializeField] string _androidBannerAdUnitId;
+    [Header("Interstitial Ads")]
+    [SerializeField] string _iOSInterstitialAdUnitId;
+    [SerializeField] string _androidInterstitialAdUnitId;
+    [Header("Rewarded Ads")]
+    [SerializeField] string _iOSRewardedAdUnitId;
+    [SerializeField] string _androidRewardedAdUnitId;
+    bool isRewardedAd = false;
+
     private string _adUnitId;
+
+    private event Action OnRewardAdsViewed;
+
 
     void Awake()
     {
@@ -38,6 +52,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
         InitializeAds();
     }
 
+
     /// <summary>
     /// This function Initialize ads and select the good device ID.
     /// <para> Must be called before calling ads (only needed one time) </para>
@@ -55,6 +70,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
         if (!Advertisement.isInitialized && Advertisement.isSupported)
         {
             Advertisement.Initialize(_gameId, _testMode, this);
+            isInitialisationFinish = true;
         }
     }
 
@@ -68,12 +84,26 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
         Debug.Log($"Unity Ads Initialization Failed: {error.ToString()} - {message}");
     }
 
+    /// <summary>
+    ///Summon a banner ad.
+    /// <para>Use with adsManager.BannerAds() (You need "AdsManager adsManager = AdsManager.instance;")</para>
+    /// <para>bannerPosition shoud be use like VERTICALPOSITION_HORIZONTALPOSITION (ex: TOP_LEFT)</para>
+    /// <para>bannerDurationTime in float (will automatically clear the banner in n seconds)</para>
+    /// </summary>
+    /// <param name="bannerPosition"></param>
+    /// <param name="bannerDurationTime"></param>
     async public void BannerAd(BannerPosition bannerPosition, float bannerDurationTime)
     {
+        if(!isInitialisationFinish)
+        {
+            Debug.Log("Ads not initialized", this);
+            return;
+        }
+
         #if UNITY_IOS
-        _adUnitId = _iOSAdUnitId;
+        _adUnitId = _iOSBannerAdUnitId;
         #elif UNITY_ANDROID
-        _adUnitId = _androidAdUnitId;
+        _adUnitId = _androidBannerAdUnitId;
         #endif
 
         Advertisement.Banner.SetPosition(bannerPosition);
@@ -107,23 +137,51 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
         Debug.Log($"Banner Error: {message}");
     }
 
+    /// <summary>
+    ///Summon an Interstitial ad.
+    /// <para>Use with adsManager.BannerAds() (You need "AdsManager adsManager = AdsManager.instance;")</para>
+    /// </summary>
     public void InterstitialAd()
     {
+        if(!isInitialisationFinish)
+        {
+            Debug.Log("Ads not initialized", this);
+            return;
+        }
+
         #if UNITy_IOS
-        _adUnitId = _iOSAdUnitId;
+        _adUnitId = _iOSInterstitialAdUnitId;
         #elif UNITY_ANDROID
-        _adUnitId = _androidAdUnitId;
+        _adUnitId = _androidInterstitialAdUnitId;
         #endif
+
         LoadAd();
         ShowAd();
     }
-    public void RewardedAd()
+
+    /// <summary>
+    /// Summon a Rewarded ad;
+    /// <para>Use with adsManager.BannerAds() (You need "AdsManager adsManager = AdsManager.instance;")</para>
+    /// <para>Put a function in _callbackOnRewaredAdsViewed that give the reward you want.</para>
+    /// </summary>
+    public void RewardedAd(Action _callbackOnRewaredAdsViewed)
     {
+        if(!isInitialisationFinish)
+        {
+            Debug.LogError("Ads not initialized", this);
+            return;
+        }
+
         #if UNITy_IOS
-        _adUnitId = _iOSAdUnitId;
+        _adUnitId = _iOSRewardedAdUnitId;
         #elif UNITY_ANDROID
-        _adUnitId = _androidAdUnitId;
+        _adUnitId = _androidRewardedAdUnitId;
         #endif
+
+        isRewardedAd = true;
+
+        OnRewardAdsViewed = _callbackOnRewaredAdsViewed;
+
         LoadAd();
         ShowAd();
     }
@@ -142,10 +200,12 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 
     public void OnUnityAdsShowComplete(string adUnitId, UnityAdsShowCompletionState showCompletionState)
     {
-        if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED))
+        if (adUnitId.Equals(_adUnitId) && showCompletionState.Equals(UnityAdsShowCompletionState.COMPLETED) && isRewardedAd)
         {
-        Debug.Log("Unity Ads Rewarded Ad Completed");
-        // Grant a reward.
+            isRewardedAd = false;
+            Debug.Log("Unity Ads Rewarded Ad Completed");
+            OnRewardAdsViewed?.Invoke();
+            OnRewardAdsViewed = null;
         }
     }
 
