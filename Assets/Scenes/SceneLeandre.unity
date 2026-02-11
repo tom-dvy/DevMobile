@@ -256,6 +256,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 318988382}
   m_CullTransparentMesh: 1
+--- !u!1 &606469624
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 606469626}
+  - component: {fileID: 606469625}
+  m_Layer: 0
+  m_Name: test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &606469625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606469624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9f08f321545ddb499120be79ac9508d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Test
+--- !u!4 &606469626
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606469624}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.86117, y: 0, z: 26.51021}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &871963421
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,116 +689,17 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1303029550
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1303029553}
-  - component: {fileID: 1303029552}
-  - component: {fileID: 1303029555}
-  - component: {fileID: 1303029551}
-  - component: {fileID: 1303029554}
-  - component: {fileID: 1303029556}
-  m_Layer: 0
-  m_Name: AdsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1303029551
+--- !u!114 &1303029552 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 1365231252002803643, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+  m_PrefabInstance: {fileID: 7942677273200412610}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303029550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34b83db914cad144d87ca15d93e8690e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BannerAds
-  _loadBannerButton: {fileID: 1404736437}
-  _bannerPosition: 4
-  _androidAdUnitId: Banner_Android
-  _iOSAdUnitId: Banner_iOS
---- !u!114 &1303029552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303029550}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8959671a7db5d5448b06d73beeb6d95c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
-  interstitialAdManager: {fileID: 0}
-  rewardedAdManager: {fileID: 0}
-  isAdLoading: 0
---- !u!4 &1303029553
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303029550}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6.69197, y: 0, z: 51.90821}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1303029554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303029550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8f2cb5b8555efb84096be08293cc2a9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::InterstitialAdExample
-  _androidAdUnitId: Interstitial_Android
-  _iOSAdUnitId: Interstitial_iOS
---- !u!114 &1303029555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303029550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4235ccef8e3cb7b409848e817ffaaf92, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AdsInitializer
-  _androidGameId: 6038399
-  _iOSGameId: 6038398
-  _testMode: 1
---- !u!114 &1303029556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1303029550}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3790ae190acd395498390b37929e1d99, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RewardedAds
-  _androidAdUnitId: Rewarded_Android
-  _iOSAdUnitId: Rewarded_iOS
 --- !u!1 &1341559454
 GameObject:
   m_ObjectHideFlags: 0
@@ -988,7 +933,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1404736438}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1303029552}
+        m_TargetAssemblyTypeName: AdsManager, Assembly-CSharp
+        m_MethodName: LoadBanner
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1404736438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1733,6 +1690,71 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1898853231}
   m_CullTransparentMesh: 1
+--- !u!1001 &7942677273200412610
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1365231252002803643, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: _iOSGameId
+      value: 6038398
+      objectReference: {fileID: 0}
+    - target: {fileID: 1365231252002803643, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: _androidGameId
+      value: 6038399
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -6.69197
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 51.90821
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8049318811313906585, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
+      propertyPath: m_Name
+      value: AdsManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1741,4 +1763,5 @@ SceneRoots:
   - {fileID: 1525451151}
   - {fileID: 1222021096}
   - {fileID: 1341559457}
-  - {fileID: 1303029553}
+  - {fileID: 7942677273200412610}
+  - {fileID: 606469626}
