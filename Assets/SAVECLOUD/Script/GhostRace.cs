@@ -12,16 +12,20 @@ using System;
 public class GhostRace : MonoBehaviour
 {
     public CloudSave cloud;
-    private float speed=20;
+    public float speed=1;
+    private bool GhostraceStart=false;
+
+    private int currentWaypoint =0;
+
     void Start()
     {
         cloud.OnUserSignedIn += Initialize;
+        cloud.LoadData();
     }
-
 	private void Initialize(bool success)
     {
         if(success)
-            StartCoroutine(followthepath());
+            StartCoroutine(isready());
         else
         {
             Debug.LogError("I can't load the race ghosts because the user has got an issue signing in", this);
@@ -30,17 +34,32 @@ public class GhostRace : MonoBehaviour
 
 	void Update()
     {
+        if (!GhostraceStart)
+        {
+            return;
+        }
+
+        if(currentWaypoint == cloud.Goto.Count - 1)
+        {
+            GhostraceStart = false;
+            return;
+        }
+
+        if (Vector3.Distance(cloud.Goto[currentWaypoint].position, transform.position) > 1)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, cloud.Goto[currentWaypoint].position, speed * Time.deltaTime);
+        }
+        else
+        {
+            currentWaypoint++;
+        }
     }
-    IEnumerator followthepath()
+
+    IEnumerator isready()
     {
         cloud.LoadData();
-		yield return new WaitUntil(() => cloud.Goto.Count > 0);
+        yield return new WaitUntil(() => cloud.Goto.Count > 0);
 		Debug.Log("cloud.Goto.Count est maintenant supérieur à 0, et est donc chargé");
-        for (int i = 0; i < cloud.Goto.Count; i++)
-        {
-            Debug.Log(cloud.Goto[i].position);
-            transform.position = Vector3.MoveTowards(transform.position, cloud.Goto[i].position, speed * Time.deltaTime); 
-            yield return new WaitForSeconds(5f);
-        }
+        GhostraceStart = true;
     }
 }

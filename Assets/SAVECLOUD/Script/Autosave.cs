@@ -20,7 +20,7 @@ public class Autosave : MonoBehaviour
     }
     IEnumerator SaveRun()
     {
-        Vector3 randomTransform = new (Random.Range(1,10), 0, Random.Range(20,30));
+        Vector3 randomTransform = new (Random.Range(100,1000), 0, Random.Range(200,300));
         Debug.Log(randomTransform);
         Quaternion randomrotation = new Quaternion(Random.Range(1, 10), Random.Range(10, 20), Random.Range(20, 30), Random.Range(30,40));
         Debug.Log(randomrotation);
