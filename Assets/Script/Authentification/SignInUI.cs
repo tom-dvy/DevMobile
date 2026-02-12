@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 /// <summary>
 /// Interface de connexion Unity Player Accounts + demande de pseudo
@@ -24,6 +25,8 @@ public class SignInUI : MonoBehaviour
     [SerializeField] private GameObject gamePanel;
     [SerializeField] private TextMeshProUGUI welcomeText;
     [SerializeField] private Button signOutButton;
+    
+    private Coroutine checkAuthCoroutine;
 
     private void Start()
     {
@@ -43,19 +46,31 @@ public class SignInUI : MonoBehaviour
             signOutButton.onClick.AddListener(OnSignOutButtonClicked);
         }
 
-        // Verifier l'etat initial
-        UpdateUI();
+        // Verifier l'etat initial avec un delai pour laisser AuthenticationManager s'initialiser
+        Invoke(nameof(UpdateUI), 0.5f);
+        
+        // Demarrer la coroutine de verification (seulement sur SignInPanel)
+        checkAuthCoroutine = StartCoroutine(CheckAuthenticationStatus());
     }
-
-    private void Update()
+    
+    private IEnumerator CheckAuthenticationStatus()
     {
-        // Verifier regulierement l'etat
-        UpdateUI();
+        while (true)
+        {
+            // Verifier seulement si on est sur le SignInPanel
+            if (signInPanel != null && signInPanel.activeSelf)
+            {
+                // Verifier toutes les 2 secondes si la connexion a reussi
+                UpdateUI();
+            }
+            
+            yield return new WaitForSeconds(2f);
+        }
     }
 
     private async void UpdateUI()
     {
-        bool isAuthenticated = AuthenticationManager.Instance != null &&
+        bool isAuthenticated = AuthenticationManager.Instance != null && 
                                AuthenticationManager.Instance.IsAuthenticated;
 
         if (!isAuthenticated)
@@ -100,7 +115,7 @@ public class SignInUI : MonoBehaviour
     private void OnSignInButtonClicked()
     {
         Debug.Log("[SIGN IN UI] Sign In button clicked");
-
+        
         // Afficher le loading
         if (loadingIndicator != null)
         {
@@ -141,6 +156,9 @@ public class SignInUI : MonoBehaviour
         {
             statusText.text = "";
         }
+        
+        // Mettre a jour l'UI au cas ou la connexion a reussi
+        UpdateUI();
     }
 
     // ============================================================================
@@ -174,9 +192,9 @@ public class SignInUI : MonoBehaviour
         try
         {
             await AuthenticationManager.Instance.SetPlayerNameAsync(username);
-
+            
             ShowUsernameFeedback("Username saved!", Color.green);
-
+            
             // Attendre un peu puis passer au jeu
             await System.Threading.Tasks.Task.Delay(1000);
             UpdateUI();
@@ -211,17 +229,23 @@ public class SignInUI : MonoBehaviour
     private void OnSignOutButtonClicked()
     {
         Debug.Log("[SIGN IN UI] Sign Out button clicked");
-
+        
         AuthenticationManager.Instance.SignOut(true);
-
-        // Clear username aussi
-        PlayerPrefs.DeleteKey("PlayerName");
-
+        
+        // NE PAS supprimer PlayerPrefs - ils sont lies au PlayerID
+        // Si le joueur se reconnecte avec le meme compte, il retrouvera son pseudo
+        
         UpdateUI();
     }
 
     private void OnDestroy()
     {
+        // Arreter la coroutine
+        if (checkAuthCoroutine != null)
+        {
+            StopCoroutine(checkAuthCoroutine);
+        }
+        
         if (signInButton != null)
         {
             signInButton.onClick.RemoveAllListeners();

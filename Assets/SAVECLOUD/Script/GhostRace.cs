@@ -6,7 +6,6 @@ using Unity.Services.CloudSave.Models;
 using Unity.Services.Core;
 using Unity.AI;
 using UnityEngine;
-using EasyButtons;
 using UnityEngine.AI;
 using System;
 public class GhostRace : MonoBehaviour
