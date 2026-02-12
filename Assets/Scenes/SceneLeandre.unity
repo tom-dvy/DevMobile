@@ -1371,7 +1371,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1303029552}
         m_TargetAssemblyTypeName: AdsManager, Assembly-CSharp
-        m_MethodName: ExampleInterstitialAd
+        m_MethodName: InterstitialAd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1642,7 +1642,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1303029552}
         m_TargetAssemblyTypeName: AdsManager, Assembly-CSharp
-        m_MethodName: ExampleRewarded
+        m_MethodName: RewardedAd
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1698,14 +1698,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1365231252002803643, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
-      propertyPath: _iOSGameId
-      value: 6038398
-      objectReference: {fileID: 0}
-    - target: {fileID: 1365231252002803643, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
-      propertyPath: _androidGameId
-      value: 6038399
-      objectReference: {fileID: 0}
     - target: {fileID: 7984691227409259409, guid: b17922bf19808fa4db54fbbaf0ccf7ce, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.69197
