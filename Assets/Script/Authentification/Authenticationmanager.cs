@@ -72,11 +72,41 @@ public class AuthenticationManager : MonoBehaviour
             // S'inscrire aux evenements Unity Player Accounts
             SetupPlayerAccountsEvents();
 
-            Debug.Log("[AUTH] Authentication ready. Call StartSignIn() to begin.");
+            // IMPORTANT : Verifier si deja connecte (session precedente)
+            await CheckExistingSession();
+
+            Debug.Log("[AUTH] Authentication ready.");
         }
         catch (Exception e)
         {
             Debug.LogError($"[AUTH] Initialization failed: {e.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Verifie si une session existe deja (Player Accounts + Authentication)
+    /// Permet de garder le joueur connecte entre les lancements
+    /// </summary>
+    private async Task CheckExistingSession()
+    {
+        try
+        {
+            // Verifier si Player Accounts a une session active
+            if (PlayerAccountService.Instance.IsSignedIn)
+            {
+                Debug.Log("[AUTH] Existing Player Accounts session found!");
+
+                // Se reconnecter automatiquement a Unity Authentication
+                await SignInWithUnityAuth();
+            }
+            else
+            {
+                Debug.Log("[AUTH] No existing session - player needs to sign in");
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogWarning($"[AUTH] Could not restore session: {e.Message}");
         }
     }
 
@@ -122,7 +152,7 @@ public class AuthenticationManager : MonoBehaviour
             Debug.Log("[AUTH] Starting Unity Player Accounts sign-in...");
 
             // Ceci ouvre le navigateur systeme pour la connexion
-            await PlayerAccountService.Instance.StartSignInAsync(true);
+            await PlayerAccountService.Instance.StartSignInAsync();
 
             // Le reste se passe dans OnPlayerAccountsSignedIn (event callback)
         }
@@ -183,6 +213,7 @@ public class AuthenticationManager : MonoBehaviour
     /// <summary>
     /// Definir le pseudo du joueur
     /// Stocke localement ET dans Unity Cloud
+    /// IMPORTANT : Lie le pseudo au PlayerID
     /// </summary>
     public async Task SetPlayerNameAsync(string name)
     {
@@ -199,12 +230,13 @@ public class AuthenticationManager : MonoBehaviour
             // Mettre a jour le nom dans Unity Authentication
             await AuthenticationService.Instance.UpdatePlayerNameAsync(name);
 
-            // Stocker localement
+            // Stocker localement AVEC le PlayerID comme cle
+            string playerID = AuthenticationService.Instance.PlayerId;
             playerName = name;
-            PlayerPrefs.SetString("PlayerName", name);
+            PlayerPrefs.SetString($"PlayerName_{playerID}", name);
             PlayerPrefs.Save();
 
-            Debug.Log("[AUTH] Player name updated successfully");
+            Debug.Log($"[AUTH] Player name updated successfully for PlayerID: {playerID}");
         }
         catch (AuthenticationException e)
         {
@@ -214,6 +246,7 @@ public class AuthenticationManager : MonoBehaviour
 
     /// <summary>
     /// Recuperer le pseudo du joueur
+    /// Cherche d'abord localement avec le PlayerID, puis dans Unity Cloud
     /// </summary>
     public async Task<string> GetPlayerNameAsync()
     {
@@ -223,10 +256,21 @@ public class AuthenticationManager : MonoBehaviour
             return playerName;
         }
 
-        // Sinon, verifier PlayerPrefs
-        if (PlayerPrefs.HasKey("PlayerName"))
+        // Recuperer le PlayerID actuel
+        string playerID = AuthenticationService.Instance.PlayerId;
+
+        if (string.IsNullOrEmpty(playerID))
         {
-            playerName = PlayerPrefs.GetString("PlayerName");
+            Debug.LogWarning("[AUTH] No PlayerID available yet");
+            return "Player";
+        }
+
+        // Verifier PlayerPrefs avec le PlayerID comme cle
+        string key = $"PlayerName_{playerID}";
+        if (PlayerPrefs.HasKey(key))
+        {
+            playerName = PlayerPrefs.GetString(key);
+            Debug.Log($"[AUTH] Player name loaded from cache for PlayerID {playerID}: {playerName}");
             return playerName;
         }
 
@@ -235,6 +279,15 @@ public class AuthenticationManager : MonoBehaviour
         {
             var playerInfo = await AuthenticationService.Instance.GetPlayerInfoAsync();
             playerName = playerInfo.Username ?? "Player";
+
+            // Sauvegarder dans le cache pour la prochaine fois
+            if (playerName != "Player" && !string.IsNullOrEmpty(playerName))
+            {
+                PlayerPrefs.SetString(key, playerName);
+                PlayerPrefs.Save();
+            }
+
+            Debug.Log($"[AUTH] Player name fetched from cloud for PlayerID {playerID}: {playerName}");
             return playerName;
         }
         catch (Exception e)
@@ -253,13 +306,20 @@ public class AuthenticationManager : MonoBehaviour
     /// </summary>
     public void SignOut(bool clearSessionToken = false)
     {
+        // Recuperer le PlayerID avant de deconnecter
+        string playerID = AuthenticationService.Instance.PlayerId;
+
         // Deconnexion de Unity Authentication
         AuthenticationService.Instance.SignOut(clearSessionToken);
 
         // Deconnexion de Unity Player Accounts
         PlayerAccountService.Instance.SignOut();
 
-        Debug.Log("[AUTH] Player signed out from both services");
+        // Vider le cache du pseudo
+        playerName = "";
+
+        Debug.Log($"[AUTH] Player signed out (PlayerID was: {playerID})");
+        Debug.Log("[AUTH] Note: PlayerPrefs kept for future sign-in with same account");
     }
 
     // ============================================================================
@@ -269,6 +329,10 @@ public class AuthenticationManager : MonoBehaviour
     private void OnSignedIn()
     {
         isAuthenticated = true;
+
+        // Vider le cache du pseudo pour forcer le rechargement
+        playerName = "";
+
         Debug.Log($"[AUTH] Unity Authentication signed in - ID: {AuthenticationService.Instance.PlayerId}");
 
         // Recuperer le pseudo automatiquement
