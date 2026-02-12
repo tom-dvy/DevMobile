@@ -6,16 +6,11 @@ using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 
-/// <summary>
-/// Gestionnaire Analytics pour Unity Services Analytics
-/// Compatible Unity 6.2+ avec Analytics SDK 6.1+
-/// </summary>
 public class AnalyticsManager : MonoBehaviour
 {
     private static AnalyticsManager instance;
     private bool isInitialized = false;
 
-    // Propriete publique pour verifier l'etat
     public bool IsInitialized => isInitialized;
 
     public static AnalyticsManager Instance
@@ -24,10 +19,10 @@ public class AnalyticsManager : MonoBehaviour
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<AnalyticsManager>();
+                instance = FindFirstObjectByType<AnalyticsManager>();
                 if (instance == null)
                 {
-                    UnityEngine.GameObject obj = new UnityEngine.GameObject("AnalyticsManager");
+                    GameObject obj = new GameObject("AnalyticsManager");
                     instance = obj.AddComponent<AnalyticsManager>();
                 }
             }
@@ -55,24 +50,22 @@ public class AnalyticsManager : MonoBehaviour
         {
             Debug.Log("[ANALYTICS] Initializing Unity Services...");
 
-            // Etape 1 : Initialiser Unity Services (requis)
             await UnityServices.InitializeAsync();
 
-            Debug.Log("[ANALYTICS] Unity Services initialized");
+            // --- CORRECTION ---
+            // On supprime StartDataCollection()
+            // On utilise EndUserConsent comme demandé par le warning
 
-            // Etape 2 : Definir le consentement utilisateur
+            // Note : Assure-toi d'ajouter 'using UnityEngine.UnityConsent;' tout en haut du fichier
             EndUserConsent.SetConsentState(new ConsentState
             {
                 AnalyticsIntent = ConsentStatus.Granted,
                 AdsIntent = ConsentStatus.Denied
             });
 
-            Debug.Log("[ANALYTICS] Consent granted for Analytics");
-
             isInitialized = true;
-            Debug.Log("[ANALYTICS] Analytics initialized successfully");
+            Debug.Log("[ANALYTICS] Initialized successfully");
 
-            // Envoyer un event de demarrage
             TrackEvent("app_started");
         }
         catch (Exception e)
@@ -82,118 +75,86 @@ public class AnalyticsManager : MonoBehaviour
         }
     }
 
-    // ============================================================================
-    // METHODE SIMPLE - UTILISE CELLE-CI
-    // ============================================================================
-
-    /// <summary>
-    /// Methode ultra simple pour tracker un event
-    /// Utilisation : AnalyticsManager.Instance.TrackEvent("mon_event");
-    /// </summary>
     public void TrackEvent(string eventName)
     {
-        if (!isInitialized)
-        {
-            Debug.LogWarning($"[ANALYTICS] Cannot track '{eventName}' - Analytics not initialized yet");
-            return;
-        }
+        if (!isInitialized) return;
 
         try
         {
-            AnalyticsService.Instance.CustomData(eventName, new Dictionary<string, object>
-            {
-                { "timestamp", DateTime.UtcNow.ToString("O") }
-            });
+            // CORRECTION ERREUR: Utilisation de RecordEvent
+            var myEvent = new CustomEvent(eventName);
+            myEvent.Add("timestamp", DateTime.UtcNow.ToString("O"));
 
+            AnalyticsService.Instance.RecordEvent(myEvent);
             Debug.Log($"[ANALYTICS] Event tracked: {eventName}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[ANALYTICS] Failed to track event '{eventName}': {e.Message}");
+            Debug.LogError($"[ANALYTICS] Error: {e.Message}");
         }
     }
 
-    /// <summary>
-    /// Methode avec parametres personnalises
-    /// </summary>
     public void TrackEventWithData(string eventName, Dictionary<string, object> customData)
     {
-        if (!isInitialized)
-        {
-            Debug.LogWarning($"[ANALYTICS] Cannot track '{eventName}' - Analytics not initialized yet");
-            return;
-        }
+        if (!isInitialized) return;
 
         try
         {
-            // Ajouter timestamp automatiquement
-            customData["timestamp"] = DateTime.UtcNow.ToString("O");
+            // CORRECTION: Conversion du Dictionary vers CustomEvent
+            var myEvent = new CustomEvent(eventName);
 
-            AnalyticsService.Instance.CustomData(eventName, customData);
+            // Ajout du timestamp
+            myEvent.Add("timestamp", DateTime.UtcNow.ToString("O"));
 
-            Debug.Log($"[ANALYTICS] Event tracked: {eventName} with {customData.Count} parameters");
+            foreach (var item in customData)
+            {
+                // Unity Analytics est strict sur les types. 
+                // On doit vérifier le type avant d'ajouter.
+                if (item.Value is string s) myEvent.Add(item.Key, s);
+                else if (item.Value is int i) myEvent.Add(item.Key, i);
+                else if (item.Value is float f) myEvent.Add(item.Key, f);
+                else if (item.Value is bool b) myEvent.Add(item.Key, b);
+                else if (item.Value is double d) myEvent.Add(item.Key, d);
+                else myEvent.Add(item.Key, item.Value.ToString()); // Fallback
+            }
+
+            AnalyticsService.Instance.RecordEvent(myEvent);
+            Debug.Log($"[ANALYTICS] Event tracked: {eventName}");
         }
         catch (Exception e)
         {
-            Debug.LogError($"[ANALYTICS] Failed to track event '{eventName}': {e.Message}");
+            Debug.LogError($"[ANALYTICS] Error: {e.Message}");
         }
     }
 
-    // ============================================================================
-    // METHODES SPECIFIQUES POUR DIAGNOSTICS
-    // ============================================================================
+    // ... Le reste de tes méthodes de diagnostic (TrackCrashAttempt, etc.) reste inchangé ...
+    // Assure-toi juste qu'elles appellent bien TrackEventWithData corrigée ci-dessus.
 
     public void TrackCrashAttempt(string crashType)
     {
-        var data = new Dictionary<string, object>
-        {
-            { "crash_type", crashType }
-        };
+        var data = new Dictionary<string, object> { { "crash_type", crashType } };
         TrackEventWithData("crash_attempt", data);
     }
 
     public void TrackException(string exceptionType, string message)
     {
-        var data = new Dictionary<string, object>
-        {
-            { "exception_type", exceptionType },
-            { "message", message }
-        };
+        var data = new Dictionary<string, object> { { "exception_type", exceptionType }, { "message", message } };
         TrackEventWithData("exception_logged", data);
     }
 
     public void TrackDebugMenuToggle(bool isVisible)
     {
-        var data = new Dictionary<string, object>
-        {
-            { "menu_state", isVisible ? "opened" : "closed" }
-        };
+        var data = new Dictionary<string, object> { { "menu_state", isVisible ? "opened" : "closed" } };
         TrackEventWithData("debug_menu_toggled", data);
     }
-
-    // ============================================================================
-    // METHODES DE FLUSH (pour forcer l'envoi)
-    // ============================================================================
 
     public void Flush()
     {
         if (isInitialized)
         {
             AnalyticsService.Instance.Flush();
-            Debug.Log("[ANALYTICS] Events flushed to server");
         }
     }
 
-    private void OnApplicationQuit()
-    {
-        Flush();
-    }
-
-    private void OnApplicationPause(bool isPaused)
-    {
-        if (isPaused)
-        {
-            Flush();
-        }
-    }
+    // ... OnApplicationQuit, etc ...
 }

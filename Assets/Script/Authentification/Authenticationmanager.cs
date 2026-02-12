@@ -1,13 +1,13 @@
 using UnityEngine;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
 using System.Threading.Tasks;
 using System;
 
 /// <summary>
-/// Gestionnaire d'authentification Unity Services
-/// Permet aux joueurs de se connecter et de sauvegarder leur pseudo
-/// Requis pour les leaderboards et autres services sociaux
+/// Gestionnaire d'authentification Unity Player Accounts
+/// Connexion via navigateur avec compte Unity persistant
 /// </summary>
 public class AuthenticationManager : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class AuthenticationManager : MonoBehaviour
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<AuthenticationManager>();
+                instance = FindFirstObjectByType<AuthenticationManager>();
                 if (instance == null)
                 {
                     UnityEngine.GameObject obj = new UnityEngine.GameObject("AuthenticationManager");
@@ -69,10 +69,12 @@ public class AuthenticationManager : MonoBehaviour
             // S'inscrire aux evenements d'authentification
             SetupAuthenticationEvents();
 
-            // Tenter une connexion anonyme automatique
-            await SignInAnonymouslyAsync();
+            // S'inscrire aux evenements Unity Player Accounts
+            SetupPlayerAccountsEvents();
+
+            Debug.Log("[AUTH] Authentication ready. Call StartSignIn() to begin.");
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogError($"[AUTH] Initialization failed: {e.Message}");
         }
@@ -90,33 +92,87 @@ public class AuthenticationManager : MonoBehaviour
         AuthenticationService.Instance.Expired += OnExpired;
     }
 
+    private void SetupPlayerAccountsEvents()
+    {
+        // Event quand la connexion Player Accounts reussit
+        PlayerAccountService.Instance.SignedIn += OnPlayerAccountsSignedIn;
+    }
+
     // ============================================================================
-    // CONNEXION ANONYME (par defaut)
+    // CONNEXION UNITY PLAYER ACCOUNTS
     // ============================================================================
 
     /// <summary>
-    /// Connexion anonyme automatique
-    /// Cree un compte temporaire sans email/mot de passe
-    /// Ideal pour commencer sans forcer l'inscription
+    /// Demarrer le processus de connexion Unity Player Accounts
+    /// Ouvre le navigateur pour que le joueur se connecte
+    /// APPELER CETTE METHODE depuis un bouton UI
     /// </summary>
-    public async Task SignInAnonymouslyAsync()
+    public async void StartSignIn()
+    {
+        // Si deja connecte aux Player Accounts, se connecter directement a Authentication
+        if (PlayerAccountService.Instance.IsSignedIn)
+        {
+            Debug.Log("[AUTH] Already signed in to Player Accounts, signing in to Authentication...");
+            await SignInWithUnityAuth();
+            return;
+        }
+
+        try
+        {
+            Debug.Log("[AUTH] Starting Unity Player Accounts sign-in...");
+
+            // Ceci ouvre le navigateur systeme pour la connexion
+            await PlayerAccountService.Instance.StartSignInAsync(true);
+
+            // Le reste se passe dans OnPlayerAccountsSignedIn (event callback)
+        }
+        catch (RequestFailedException ex)
+        {
+            Debug.LogError($"[AUTH] Player Accounts sign-in failed: {ex.Message}");
+            Debug.LogError($"[AUTH] Error code: {ex.ErrorCode}");
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError($"[AUTH] Unexpected error during sign-in: {ex.Message}");
+        }
+    }
+
+    /// <summary>
+    /// Callback appele quand le joueur s'est connecte aux Player Accounts
+    /// Se connecte ensuite automatiquement a Unity Authentication
+    /// </summary>
+    private async void OnPlayerAccountsSignedIn()
+    {
+        Debug.Log("[AUTH] Player Accounts sign-in successful!");
+        await SignInWithUnityAuth();
+    }
+
+    /// <summary>
+    /// Se connecter a Unity Authentication avec le token Player Accounts
+    /// </summary>
+    private async Task SignInWithUnityAuth()
     {
         try
         {
-            Debug.Log("[AUTH] Signing in anonymously...");
+            Debug.Log("[AUTH] Signing in to Unity Authentication...");
 
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            // Recuperer le token d'acces Player Accounts
+            string accessToken = PlayerAccountService.Instance.AccessToken;
 
-            Debug.Log("[AUTH] Anonymous sign-in successful");
+            // Se connecter a Unity Authentication avec ce token
+            await AuthenticationService.Instance.SignInWithUnityAsync(accessToken);
+
+            Debug.Log("[AUTH] Unity Authentication sign-in successful!");
             Debug.Log($"[AUTH] Player ID: {AuthenticationService.Instance.PlayerId}");
         }
-        catch (AuthenticationException e)
+        catch (AuthenticationException ex)
         {
-            Debug.LogError($"[AUTH] Anonymous sign-in failed: {e.Message}");
+            Debug.LogError($"[AUTH] Unity Authentication sign-in failed: {ex.Message}");
+            Debug.LogError($"[AUTH] Error code: {ex.ErrorCode}");
         }
-        catch (RequestFailedException e)
+        catch (RequestFailedException ex)
         {
-            Debug.LogError($"[AUTH] Network error: {e.Message}");
+            Debug.LogError($"[AUTH] Network error: {ex.Message}");
         }
     }
 
@@ -126,7 +182,7 @@ public class AuthenticationManager : MonoBehaviour
 
     /// <summary>
     /// Definir le pseudo du joueur
-    /// Stocke localement ET dans Unity Cloud (pour leaderboard)
+    /// Stocke localement ET dans Unity Cloud
     /// </summary>
     public async Task SetPlayerNameAsync(string name)
     {
@@ -158,7 +214,6 @@ public class AuthenticationManager : MonoBehaviour
 
     /// <summary>
     /// Recuperer le pseudo du joueur
-    /// D'abord depuis le cache local, sinon depuis Unity Cloud
     /// </summary>
     public async Task<string> GetPlayerNameAsync()
     {
@@ -182,10 +237,10 @@ public class AuthenticationManager : MonoBehaviour
             playerName = playerInfo.Username ?? "Player";
             return playerName;
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Debug.LogWarning($"[AUTH] Could not fetch player name: {e.Message}");
-            return "Player"; // Nom par defaut
+            return "Player";
         }
     }
 
@@ -194,13 +249,17 @@ public class AuthenticationManager : MonoBehaviour
     // ============================================================================
 
     /// <summary>
-    /// Deconnecter le joueur
-    /// Efface la session mais garde le PlayerID en cache
+    /// Deconnecter le joueur de Player Accounts ET Authentication
     /// </summary>
-    public void SignOut()
+    public void SignOut(bool clearSessionToken = false)
     {
-        AuthenticationService.Instance.SignOut();
-        Debug.Log("[AUTH] Player signed out");
+        // Deconnexion de Unity Authentication
+        AuthenticationService.Instance.SignOut(clearSessionToken);
+
+        // Deconnexion de Unity Player Accounts
+        PlayerAccountService.Instance.SignOut();
+
+        Debug.Log("[AUTH] Player signed out from both services");
     }
 
     // ============================================================================
@@ -210,7 +269,7 @@ public class AuthenticationManager : MonoBehaviour
     private void OnSignedIn()
     {
         isAuthenticated = true;
-        Debug.Log($"[AUTH] Player signed in - ID: {AuthenticationService.Instance.PlayerId}");
+        Debug.Log($"[AUTH] Unity Authentication signed in - ID: {AuthenticationService.Instance.PlayerId}");
 
         // Recuperer le pseudo automatiquement
         _ = GetPlayerNameAsync();
@@ -219,16 +278,16 @@ public class AuthenticationManager : MonoBehaviour
     private void OnSignedOut()
     {
         isAuthenticated = false;
-        Debug.Log("[AUTH] Player signed out");
+        Debug.Log("[AUTH] Unity Authentication signed out");
     }
 
-    private void OnExpired()
+    private async void OnExpired()
     {
         isAuthenticated = false;
-        Debug.LogWarning("[AUTH] Session expired - reconnecting...");
+        Debug.LogWarning("[AUTH] Session expired - please sign in again");
 
-        // Reconnexion automatique
-        _ = SignInAnonymouslyAsync();
+        // Redemander la connexion
+        StartSignIn();
     }
 
     // ============================================================================
@@ -242,6 +301,11 @@ public class AuthenticationManager : MonoBehaviour
             AuthenticationService.Instance.SignedIn -= OnSignedIn;
             AuthenticationService.Instance.SignedOut -= OnSignedOut;
             AuthenticationService.Instance.Expired -= OnExpired;
+        }
+
+        if (PlayerAccountService.Instance != null)
+        {
+            PlayerAccountService.Instance.SignedIn -= OnPlayerAccountsSignedIn;
         }
     }
 }
