@@ -88,11 +88,8 @@ public class CarSpawner : MonoBehaviour
             if (carController != null)
             {
                 carController.enabled = false;
-                Debug.Log("CarController disabled - waiting for countdown");
             }
         }
-
-        Debug.Log($"✅ Car spawned at StartPoint + offset {spawnOffset}");
     }
 
     public void RespawnCar()

@@ -1,4 +1,6 @@
 using UnityEngine;
+using LitMotion;
+using LitMotion.Extensions;
 
 /// <summary>
 /// Represents a single track segment used by the procedural track generator.
@@ -21,11 +23,34 @@ public class TrackSegment : MonoBehaviour
     public Transform startPoint;    // Where the previous segment connects
     public Transform endPoint;      // Where the next segment connects
 
+    [Header("Animation Settings")]
+    [Tooltip("Duration of the descent animation when the segment is spawned")]
+    public float descentDuration = 1.5f;
+
+    [Tooltip("Height offset applied during the descent animation to create a falling effect")]
+    public float heightOffset = 10f;
+
     public enum SegmentType
     {
         Straight,
         CurveLeft,
         CurveRight
+    }
+
+    public void Start()
+    {
+        if (!isStartSegment && !isFinishSegment)
+        {
+            Vector3 BasePosition = transform.position;
+
+            Vector3 StartPosition = BasePosition + (Vector3.up * heightOffset);
+
+            transform.position = StartPosition;
+
+            LMotion.Create(StartPosition, BasePosition, descentDuration)
+                .WithEase(Ease.OutQuad)
+                .BindToPosition(transform);
+        }
     }
 
     private void OnDrawGizmos()

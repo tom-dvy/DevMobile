@@ -1271,7 +1271,7 @@ PrefabInstance:
     - target: {fileID: 6069459354277202169, guid: 417b639586a31214abc6fff60b57af8d, type: 3}
       propertyPath: Target.TrackingTarget
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 629306220}
     - target: {fileID: 7449819695887294228, guid: 417b639586a31214abc6fff60b57af8d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -27,6 +27,7 @@
   <Project Path="Unity.Burst.csproj" />
   <Project Path="Unity.Services.Core.Environments.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
+  <Project Path="LitMotion.csproj" />
   <Project Path="Unity.Services.Analytics.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.Services.Authentication.csproj" />
@@ -52,6 +53,7 @@
   <Project Path="Unity.Splines.Editor.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.Services.Samples.Friends.csproj" />
+  <Project Path="LitMotion.Extensions.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
   <Project Path="UnityEditor.Purchasing.csproj" />
   <Project Path="Unity.TextMeshPro.Editor.csproj" />
@@ -98,6 +100,7 @@
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />
+  <Project Path="LitMotion.Editor.csproj" />
   <Project Path="Unity.Purchasing.AppleStub.csproj" />
   <Project Path="Unity.Purchasing.SecurityStub.csproj" />
   <Project Path="Unity.Services.CloudSave.Editor.csproj" />
