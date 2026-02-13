@@ -447,6 +447,7 @@ GameObject:
   - component: {fileID: 306175597181271506}
   - component: {fileID: 4578265475847392742}
   - component: {fileID: 8658157640981431684}
+  - component: {fileID: 2749582840161144736}
   m_Layer: 0
   m_Name: Goblin_Offroad
   m_TagString: Untagged
@@ -572,6 +573,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2749582840161144736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862819451959504845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669e047e4a92d754fb929246627f78ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarSpawner
+  trackGenerator: {fileID: 0}
+  spawnOffset: {x: 0, y: 1, z: 5}
+  spawnOnStart: 1
+  maxWaitTime: 2
 --- !u!1 &5601279091611961538
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,64 +2,70 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
-/// <summary>
-/// Displays and manages a countdown before the race starts
-/// Disables car control during the countdown, then enables it when finished
-/// Supports UI text, panel display, and optional audio feedback
-/// </summary>
 public class RaceCountdown : MonoBehaviour
 {
     [Header("Countdown Settings")]
-    [SerializeField] private float countdownDuration = 3f; // Countdown length in seconds
-    [SerializeField] private bool startOnLoad = true;       // Start countdown automatically on scene load
-
+    [SerializeField] private float countdownDuration = 3f;
+    [SerializeField] private bool startOnLoad = true;
+    
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI countdownText; // Text displaying countdown numbers
-    [SerializeField] private GameObject countdownPanel;     // Panel containing countdown UI
-
-    [Header("Car Reference")]
-    [SerializeField] private CarController carController;   // Car to disable/enable during countdown
-
+    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private GameObject countdownPanel;
+    
+    [Header("Car Reference (Optional - will auto-find)")]
+    [SerializeField] private CarController carController;
+    
     [Header("Audio (Optional)")]
-    [SerializeField] private AudioClip countdownBeep; // Sound played each second
-    [SerializeField] private AudioClip goSound;        // Sound played at "GO!"
-
+    [SerializeField] private AudioClip countdownBeep;
+    [SerializeField] private AudioClip goSound;
+    
     private bool countdownFinished = false;
     private AudioSource audioSource;
 
-    private void Start()
+    void Start()
     {
         audioSource = GetComponent<AudioSource>();
-
+        
+        // Auto-find car controller if not set
+        if (carController == null)
+        {
+            carController = FindFirstObjectByType<CarController>();
+        }
+        
         if (startOnLoad)
         {
-            StartCountdown();
+            // Attendre un peu pour laisser le temps au CarSpawner de spawn la voiture
+            Invoke(nameof(StartCountdown), 0.5f);
         }
     }
 
-    // Starts the countdown if it has not already been completed
     public void StartCountdown()
     {
         if (countdownFinished) return;
-
+        
         StartCoroutine(CountdownRoutine());
     }
 
     private IEnumerator CountdownRoutine()
     {
-        // Disable car control during countdown
+        // Disable car movement during countdown
         if (carController != null)
         {
             carController.enabled = false;
+            Debug.Log("Countdown: Car disabled");
         }
-
-        // Show countdown UI
+        else
+        {
+            Debug.LogWarning("CarController not found! Car might move during countdown.");
+        }
+        
+        // Show countdown panel
         if (countdownPanel != null)
         {
             countdownPanel.SetActive(true);
         }
-
-        // Countdown sequence: 3, 2, 1...
+        
+        // Countdown: 3, 2, 1
         for (int i = (int)countdownDuration; i > 0; i--)
         {
             if (countdownText != null)
@@ -67,49 +73,46 @@ public class RaceCountdown : MonoBehaviour
                 countdownText.text = i.ToString();
                 countdownText.fontSize = 120;
             }
-
-            // Play countdown beep
+            
             if (audioSource != null && countdownBeep != null)
             {
                 audioSource.PlayOneShot(countdownBeep);
             }
-
+            
+            Debug.Log($"Countdown: {i}");
             yield return new WaitForSeconds(1f);
         }
-
-        // Display "GO!"
+        
+        // GO!
         if (countdownText != null)
         {
             countdownText.text = "GO!";
             countdownText.fontSize = 150;
         }
-
-        // Play start sound
+        
         if (audioSource != null && goSound != null)
         {
             audioSource.PlayOneShot(goSound);
         }
-
+        
+        Debug.Log("GO!");
         yield return new WaitForSeconds(1f);
-
-        // Hide countdown UI
+        
+        // Hide countdown
         if (countdownPanel != null)
         {
             countdownPanel.SetActive(false);
         }
-
-        // Re-enable car control
+        
+        // Enable car movement
         if (carController != null)
         {
             carController.enabled = true;
+            Debug.Log("Countdown: Car enabled - GO!");
         }
-
+        
         countdownFinished = true;
     }
 
-    // Returns true once the countdown has fully completed
-    public bool IsCountdownFinished()
-    {
-        return countdownFinished;
-    }
+    public bool IsCountdownFinished() => countdownFinished;
 }
