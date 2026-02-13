@@ -9,26 +9,26 @@ using LitMotion.Extensions;
 public class TrackSegment : MonoBehaviour
 {
     [Header("Segment Info")]
-    public string segmentID;        // Optional identifier for the segment
-    public SegmentType type;        // Gameplay type of the segment
+    public string segmentID;
+    public SegmentType type;
 
     [Header("Special Segment")]
-    [Tooltip("True if this segment is used as the track start")]
     public bool isStartSegment = false;
-
-    [Tooltip("True if this segment is used as the track finish")]
     public bool isFinishSegment = false;
 
     [Header("Connection Points")]
-    public Transform startPoint;    // Where the previous segment connects
-    public Transform endPoint;      // Where the next segment connects
+    public Transform startPoint;
+    public Transform endPoint;
 
     [Header("Animation Settings")]
-    [Tooltip("Duration of the descent animation when the segment is spawned")]
+    [Tooltip("Duration of the descent animation")]
     public float descentDuration = 1.5f;
 
-    [Tooltip("Height offset applied during the descent animation to create a falling effect")]
+    [Tooltip("Height offset applied during the descent animation")]
     public float heightOffset = 10f;
+
+    [Tooltip("Delay between each segment number (ex: 0.1 means Segment_2 starts 0.1s after Segment_1)")]
+    public float delayPerIndex = 0.15f;
 
     public enum SegmentType
     {
@@ -39,41 +39,51 @@ public class TrackSegment : MonoBehaviour
 
     public void Start()
     {
-        if (!isStartSegment && !isFinishSegment)
+        if (!isStartSegment)
         {
-            Vector3 BasePosition = transform.position;
+            int index = GetIndexFromName();
 
-            Vector3 StartPosition = BasePosition + (Vector3.up * heightOffset);
+            Vector3 basePosition = transform.position;
+            Vector3 startPosition = basePosition + (Vector3.up * heightOffset);
 
-            transform.position = StartPosition;
+            transform.position = startPosition;
 
-            LMotion.Create(StartPosition, BasePosition, descentDuration)
-                .WithEase(Ease.OutQuad)
+            float finalDelay = index * delayPerIndex;
+
+            LMotion.Create(startPosition, basePosition, descentDuration)
+                .WithDelay(finalDelay)
+                .WithEase(Ease.OutBack)
                 .BindToPosition(transform);
         }
     }
 
+    /// <summary>
+    /// Read the segment index from the GameObject's name
+    /// attended format : "Text_Digit_Text" (ex: "Segment_1_Straight")
+    /// </summary>
+    private int GetIndexFromName()
+    {
+        string[] parts = gameObject.name.Split('_');
+        
+        if (parts.Length > 1 && int.TryParse(parts[1], out int result))
+        {
+            return result;
+        }
+
+        return 0;
+    }
+
     private void OnDrawGizmos()
     {
-        // Editor-only visualization to help with segment alignment
         if (startPoint == null || endPoint == null) return;
 
-        // Color coding for easier identification
-        if (isStartSegment)
-            Gizmos.color = Color.cyan;
-        else if (isFinishSegment)
-            Gizmos.color = Color.magenta;
-        else
-            Gizmos.color = Color.green;
+        if (isStartSegment) Gizmos.color = Color.cyan;
+        else if (isFinishSegment) Gizmos.color = Color.magenta;
+        else Gizmos.color = Color.green;
 
-        // Draw start point
-        Gizmos.DrawSphere(startPoint.position, 2f);
-
-        // Draw end point
+        Gizmos.DrawSphere(startPoint.position, 1f);
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(endPoint.position, 2f);
-
-        // Draw direction line
+        Gizmos.DrawSphere(endPoint.position, 1f);
         Gizmos.color = Color.yellow;
         Gizmos.DrawLine(startPoint.position, endPoint.position);
     }
