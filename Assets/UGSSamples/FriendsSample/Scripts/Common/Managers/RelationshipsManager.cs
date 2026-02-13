@@ -7,6 +7,7 @@ using Unity.Services.Friends.Exceptions;
 using Unity.Services.Friends.Models;
 using Unity.Services.Friends.Notifications;
 using UnityEngine;
+using Unity.Services.Core;
 
 namespace Unity.Services.Samples.Friends
 {
@@ -34,17 +35,30 @@ namespace Unity.Services.Samples.Friends
 
         async void Start()
         {
-            //If this is added to a larger project, the service init order should be controlled from one place, and replace this.
-            await UnityServiceAuthenticator.SignIn();
-            await Init();
+            if (UnityServices.State == ServicesInitializationState.Uninitialized)
+            {
+                await UnityServices.InitializeAsync();
+            }
+
+            if (AuthenticationService.Instance.IsSignedIn)
+            {
+                Debug.Log("Joueur correctement authentifié. Chargement de la liste d'amis...");
+                await Init();
+            }
+            else
+            {
+                Debug.LogError("Erreur : Le joueur n'est pas connecté !");
+
+                UnityEngine.SceneManagement.SceneManager.LoadScene("Tom.B");
+            }
         }
 
         async Task Init()
         {
             // Registering callbacks before Friends Initializing to ensure the receiving of all
             // `NotificationsConnectivityChanged` events.
-            RegisterFriendsEventCallbacks(); 
-            
+            RegisterFriendsEventCallbacks();
+
             await FriendsService.Instance.InitializeAsync();
             UIInit();
             await LogInAsync();
@@ -221,7 +235,7 @@ namespace Unity.Services.Samples.Friends
 
             m_RelationshipsView.RelationshipBarView.Refresh();
         }
-        
+
         async Task<bool> SendFriendRequest(string playerName)
         {
             try
@@ -384,7 +398,7 @@ namespace Unity.Services.Samples.Friends
             catch (FriendsServiceException e)
             {
                 Debug.Log(
-                    "An error occurred while performing the action. HttpCode: " + e.StatusCode + ", FriendsErrorCode: " + e.ErrorCode +  ", Message: " + e.Message);
+                    "An error occurred while performing the action. HttpCode: " + e.StatusCode + ", FriendsErrorCode: " + e.ErrorCode + ", Message: " + e.Message);
             }
         }
 

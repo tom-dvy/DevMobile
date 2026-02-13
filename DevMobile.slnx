@@ -31,8 +31,8 @@
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.Services.Authentication.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
-  <Project Path="PPv2URPConverters.csproj" />
   <Project Path="Unity.Services.Friends.Internal.Generated.csproj" />
+  <Project Path="PPv2URPConverters.csproj" />
   <Project Path="Unity.Services.Authentication.Editor.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
   <Project Path="Unity.Services.Wire.Internal.csproj" />
