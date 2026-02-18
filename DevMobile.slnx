@@ -26,8 +26,8 @@
   <Project Path="Unity.2D.Tilemap.Editor.csproj" />
   <Project Path="Unity.Burst.csproj" />
   <Project Path="Unity.Services.Core.Environments.Editor.csproj" />
-  <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
   <Project Path="LitMotion.csproj" />
+  <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
   <Project Path="Unity.Services.Analytics.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.Services.Authentication.csproj" />

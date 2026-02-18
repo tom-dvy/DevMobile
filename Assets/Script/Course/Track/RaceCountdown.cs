@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
 public class RaceCountdown : MonoBehaviour
 {
@@ -12,7 +13,15 @@ public class RaceCountdown : MonoBehaviour
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private GameObject countdownPanel;
     
-    [Header("Car Reference (Optional - will auto-find)")]
+    [Header("Starting Lights (Feux)")]
+    [SerializeField] private GameObject lightsPanel;
+    [Tooltip("Assigne 6 images : les deux du '3', puis les deux du '2', puis les deux du '1'")]
+    [SerializeField] private Image[] raceLights; 
+    [SerializeField] private Color colorOff = new Color(0.2f, 0.2f, 0.2f, 1f);
+    [SerializeField] private Color colorRed = Color.red;
+    [SerializeField] private Color colorGreen = Color.green;
+
+    [Header("Car Reference (Optional)")]
     [SerializeField] private CarController carController;
     
     [Header("Audio (Optional)")]
@@ -26,46 +35,40 @@ public class RaceCountdown : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         
-        // Auto-find car controller if not set
         if (carController == null)
-        {
             carController = FindFirstObjectByType<CarController>();
-        }
+
+        ResetLights();
         
         if (startOnLoad)
-        {
-            // Attendre un peu pour laisser le temps au CarSpawner de spawn la voiture
             Invoke(nameof(StartCountdown), 0.5f);
-        }
     }
 
     public void StartCountdown()
     {
         if (countdownFinished) return;
-        
         StartCoroutine(CountdownRoutine());
+    }
+
+    private void ResetLights()
+    {
+        foreach (Image light in raceLights)
+        {
+            if (light != null) light.color = colorOff;
+        }
+        if (lightsPanel != null) lightsPanel.SetActive(false);
     }
 
     private IEnumerator CountdownRoutine()
     {
-        // Disable car movement during countdown
-        if (carController != null)
-        {
-            carController.enabled = false;
-            Debug.Log("Countdown: Car disabled");
-        }
-        else
-        {
-            Debug.LogWarning("CarController not found! Car might move during countdown.");
-        }
+        // Bloquer la voiture
+        if (carController != null) carController.enabled = false;
         
-        // Show countdown panel
-        if (countdownPanel != null)
-        {
-            countdownPanel.SetActive(true);
-        }
+        // Afficher l'UI
+        if (countdownPanel != null) countdownPanel.SetActive(true);
+        if (lightsPanel != null) lightsPanel.SetActive(true);
         
-        // Countdown: 3, 2, 1
+        // --- BOUCLE DE DÉCOMPTE (3, 2, 1) ---
         for (int i = (int)countdownDuration; i > 0; i--)
         {
             if (countdownText != null)
@@ -73,43 +76,50 @@ public class RaceCountdown : MonoBehaviour
                 countdownText.text = i.ToString();
                 countdownText.fontSize = 120;
             }
+
+            // Logique pour allumer les paires (3-3, puis 2-2, puis 1-1)
+            // On suppose 6 feux : [0][1][2]  [3][4][5]
+            // Pour i=3 (le "3"), on allume l'index 0 et 5
+            // Pour i=2 (le "2"), on allume l'index 1 et 4
+            // Pour i=1 (le "1"), on allume l'index 2 et 3
+            int pairIndex = (int)countdownDuration - i; 
+            int oppositeIndex = (raceLights.Length - 1) - pairIndex;
+
+            if (pairIndex < raceLights.Length && raceLights[pairIndex] != null)
+                raceLights[pairIndex].color = colorRed;
+
+            if (oppositeIndex >= 0 && raceLights[oppositeIndex] != null)
+                raceLights[oppositeIndex].color = colorRed;
             
             if (audioSource != null && countdownBeep != null)
-            {
                 audioSource.PlayOneShot(countdownBeep);
-            }
             
-            Debug.Log($"Countdown: {i}");
             yield return new WaitForSeconds(1f);
         }
         
-        // GO!
+        // --- GO! ---
         if (countdownText != null)
         {
             countdownText.text = "GO!";
             countdownText.fontSize = 150;
         }
+
+        // Tout passer en vert
+        foreach (Image light in raceLights)
+        {
+            if (light != null) light.color = colorGreen;
+        }
         
         if (audioSource != null && goSound != null)
-        {
             audioSource.PlayOneShot(goSound);
-        }
         
-        Debug.Log("GO!");
         yield return new WaitForSeconds(1f);
         
-        // Hide countdown
-        if (countdownPanel != null)
-        {
-            countdownPanel.SetActive(false);
-        }
+        // --- NETTOYAGE ---
+        if (countdownPanel != null) countdownPanel.SetActive(false);
+        if (lightsPanel != null) lightsPanel.SetActive(false);
         
-        // Enable car movement
-        if (carController != null)
-        {
-            carController.enabled = true;
-            Debug.Log("Countdown: Car enabled - GO!");
-        }
+        if (carController != null) carController.enabled = true;
         
         countdownFinished = true;
     }
