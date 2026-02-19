@@ -364,17 +364,6 @@ MonoBehaviour:
   m_FirstSelected: {fileID: 0}
   m_sendNavigationEvents: 1
   m_DragThreshold: 10
---- !u!114 &200261518 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3591871030979108135, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
-  m_PrefabInstance: {fileID: 7035397433043160453}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
 --- !u!114 &292900976 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3883540629324087554, guid: e3b0e81412130a3488626fdca2a99a32, type: 3}
@@ -699,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 1753847046}
     - target: {fileID: 4578265475847392742, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
       propertyPath: inputMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4578265475847392742, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
       propertyPath: variableJoystick
@@ -718,25 +707,9 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 8658157640981431684, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
-      propertyPath: OnItemChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8658157640981431684, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
       propertyPath: OnItemChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1357356505}
-    - target: {fileID: 8658157640981431684, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
-      propertyPath: OnItemChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: UpdateItemUI
-      objectReference: {fileID: 0}
-    - target: {fileID: 8658157640981431684, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
-      propertyPath: OnItemChanged.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: ItemSpriteHandler, Assembly-CSharp
-      objectReference: {fileID: 0}
-    - target: {fileID: 8658157640981431684, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
-      propertyPath: OnItemChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -789,14 +762,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RaceManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3988674642969447926, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
-      propertyPath: isRunning
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3988674642969447926, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
-      propertyPath: requiredLaps
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4873867665379956338, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -842,21 +807,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 5337809134618903100}
     - target: {fileID: 9150438450511623318, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
-      propertyPath: carController
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9150438450511623318, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
-      propertyPath: countdownText
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 9150438450511623318, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
       propertyPath: countdownPanel
       value: 
       objectReference: {fileID: 5337809134618903100}
-    - target: {fileID: 9150438450511623318, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
-      propertyPath: raceLights.Array.size
-      value: 6
-      objectReference: {fileID: 0}
     - target: {fileID: 9150438450511623318, guid: 84fa3c20d9f0e3f41bbe69b0d0ddd7b8, type: 3}
       propertyPath: 'raceLights.Array.data[0]'
       value: 
@@ -1217,22 +1170,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: TrackManager
       objectReference: {fileID: 0}
-    - target: {fileID: 3776721215672290668, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
-      propertyPath: seed
-      value: 12345
-      objectReference: {fileID: 0}
-    - target: {fileID: 3776721215672290668, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
-      propertyPath: startSegment
-      value: 
-      objectReference: {fileID: 8497101592189174596, guid: 09fa3dba0f680784192797afcde3781b, type: 3}
-    - target: {fileID: 3776721215672290668, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
-      propertyPath: finishSegment
-      value: 
-      objectReference: {fileID: 8497101592189174596, guid: 1cae79e4fa78f65409bb1aabe57e65c0, type: 3}
-    - target: {fileID: 3776721215672290668, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
-      propertyPath: availableSegments.Array.size
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 4949316942048724723, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
       propertyPath: m_IsActive
       value: 1
@@ -1412,10 +1349,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 54839937}
     m_Modifications:
-    - target: {fileID: 1874343395151804213, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
-      propertyPath: iconImage
-      value: 
-      objectReference: {fileID: 200261518}
     - target: {fileID: 2921370044345822626, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
       propertyPath: m_Pivot.x
       value: 0

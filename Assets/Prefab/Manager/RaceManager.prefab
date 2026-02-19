@@ -45,7 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f92dbedf29fa9048b7c5feec9af1f6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RaceTimer
+  requiredLaps: 1
   isRunning: 0
+  onRaceStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onLapComplete:
+    m_PersistentCalls:
+      m_Calls: []
+  onRaceComplete:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &9150438450511623318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +72,17 @@ MonoBehaviour:
   startOnLoad: 1
   countdownText: {fileID: 0}
   countdownPanel: {fileID: 0}
+  lightsPanel: {fileID: 0}
+  raceLights:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  colorOff: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  colorRed: {r: 1, g: 0, b: 0, a: 1}
+  colorGreen: {r: 0, g: 1, b: 0, a: 1}
   carController: {fileID: 0}
   countdownBeep: {fileID: 0}
   goSound: {fileID: 0}

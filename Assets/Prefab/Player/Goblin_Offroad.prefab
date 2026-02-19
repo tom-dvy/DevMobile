@@ -538,7 +538,7 @@ MonoBehaviour:
   turnSpeed: 70
   brakeDeceleration: 15
   minSpeed: 0.1
-  inputMode: 0
+  inputMode: 1
   leftKey: 15
   rightKey: 18
   brakeKey: 51
@@ -562,12 +562,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+        m_TargetAssemblyTypeName: ItemSpriteHandler, Assembly-CSharp
+        m_MethodName: UpdateItemUI
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -589,6 +589,7 @@ MonoBehaviour:
   spawnOffset: {x: 0, y: 1, z: 5}
   spawnOnStart: 1
   maxWaitTime: 2
+  disableCarControllerOnSpawn: 1
 --- !u!1 &5601279091611961538
 GameObject:
   m_ObjectHideFlags: 0
