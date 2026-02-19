@@ -533,8 +533,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c9651e759b344409d018096dee791b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
-  forwardSpeed: 20
-  acceleration: 10
+  forwardSpeed: 40
+  acceleration: 15
   turnSpeed: 70
   brakeDeceleration: 15
   minSpeed: 0.1

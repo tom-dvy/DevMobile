@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: b4f152e0498484391a9f0d5a1facf03b, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -93,7 +93,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 20201, guid: 0000000000000000f000000000000000, type: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: b66028486d061e7409a32dfab91bcaa9, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -948,6 +948,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 54839937}
     m_Modifications:
+    - target: {fileID: 1292202892924926418, guid: 8314c367c88aa624c9be9df63ccf0471, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2673435024283853149, guid: 8314c367c88aa624c9be9df63ccf0471, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1034,6 +1038,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5323575795986226393, guid: 8314c367c88aa624c9be9df63ccf0471, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5851407151822154890, guid: 8314c367c88aa624c9be9df63ccf0471, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8875068233360715077, guid: 8314c367c88aa624c9be9df63ccf0471, type: 3}
@@ -1429,6 +1437,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3036198868433829956, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3036198868433829956, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3036198868433829956, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3036198868433829956, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 3136015257329874568, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -1441,6 +1465,22 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1504524795}
+    - target: {fileID: 6019015853763702782, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6019015853763702782, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6019015853763702782, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6019015853763702782, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 7871478145120148546, guid: 9d12c5b979d5dd64c8025553f5af08b3, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -12.330078
