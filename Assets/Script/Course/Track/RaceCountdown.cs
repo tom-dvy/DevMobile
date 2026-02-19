@@ -61,14 +61,11 @@ public class RaceCountdown : MonoBehaviour
 
     private IEnumerator CountdownRoutine()
     {
-        // Bloquer la voiture
         if (carController != null) carController.enabled = false;
         
-        // Afficher l'UI
         if (countdownPanel != null) countdownPanel.SetActive(true);
         if (lightsPanel != null) lightsPanel.SetActive(true);
         
-        // --- BOUCLE DE DÉCOMPTE (3, 2, 1) ---
         for (int i = (int)countdownDuration; i > 0; i--)
         {
             if (countdownText != null)
@@ -77,11 +74,6 @@ public class RaceCountdown : MonoBehaviour
                 countdownText.fontSize = 120;
             }
 
-            // Logique pour allumer les paires (3-3, puis 2-2, puis 1-1)
-            // On suppose 6 feux : [0][1][2]  [3][4][5]
-            // Pour i=3 (le "3"), on allume l'index 0 et 5
-            // Pour i=2 (le "2"), on allume l'index 1 et 4
-            // Pour i=1 (le "1"), on allume l'index 2 et 3
             int pairIndex = (int)countdownDuration - i; 
             int oppositeIndex = (raceLights.Length - 1) - pairIndex;
 
@@ -97,14 +89,12 @@ public class RaceCountdown : MonoBehaviour
             yield return new WaitForSeconds(1f);
         }
         
-        // --- GO! ---
         if (countdownText != null)
         {
             countdownText.text = "GO!";
             countdownText.fontSize = 150;
         }
 
-        // Tout passer en vert
         foreach (Image light in raceLights)
         {
             if (light != null) light.color = colorGreen;
@@ -115,7 +105,6 @@ public class RaceCountdown : MonoBehaviour
         
         yield return new WaitForSeconds(1f);
         
-        // --- NETTOYAGE ---
         if (countdownPanel != null) countdownPanel.SetActive(false);
         if (lightsPanel != null) lightsPanel.SetActive(false);
         

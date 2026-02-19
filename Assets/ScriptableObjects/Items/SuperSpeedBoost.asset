@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpeedBoostItem
   itemName: Super Speed Boost
   icon: {fileID: 0}
-  boostAmount: 100
+  boostAmount: 30
   duration: 2
