@@ -7,7 +7,10 @@ public class Test : MonoBehaviour
     async void Start()
     {
         adsManager = AdsManager.instance;
-        await Awaitable.WaitForSecondsAsync(5f);
+    }
+
+    public void ToggleTest()
+    {
         adsManager.RewardedAd(adsManager.rewardManager.ExampleReward);
     }
 }
