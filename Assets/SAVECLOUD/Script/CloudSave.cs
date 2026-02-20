@@ -9,11 +9,13 @@ using UnityEngine;
 public class CloudSave : MonoBehaviour
 {
     public GameObject target;
+    public RaceData Playerdata;
     public List<Pose> Goto;
-
+    public TrackGenerator seed;
+    public RaceTimer Timer;
+    public List<RaceData> Listplayerdata;
     public event Action<bool> OnUserSignedIn;
-
-
+    public List<RaceData>Playerlist = new List<RaceData>();
     private async void Awake()
     {
         await UnityServices.InitializeAsync();
@@ -31,19 +33,16 @@ public class CloudSave : MonoBehaviour
         }
     
     }
-    public async void SaveRace(List<Pose> Poses)
+    public void SaveRace(List<Pose> Poses)
     {
-        RaceData a = new RaceData("Playertest", Poses);
-
-        string raceJSON = JsonUtility.ToJson(a);
-        Dictionary<string, object> raceDictionnary = JsonUtility.FromJson<Dictionary<string, object>>(raceJSON);
-        await CloudSaveService.Instance.Data.Player.SaveAsync(raceDictionnary);
-        Debug.Log($"Saved data {string.Join(',', raceJSON)}");
+        Playerdata = new RaceData("PlayertestV2", Poses,Timer.totalRaceTime);
+        SaveData();
     }
-    public async void SaveData(List<Pose> Poses)
+    public async void SaveData()
     {
+        Playerlist.Add(Playerdata);
         var playerData = new Dictionary<string, object>{
-          {"firstKeyName", Poses},
+          {""+seed.seed, Playerlist},
           {"secondKeyName", 123}
         };
         await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
@@ -51,13 +50,13 @@ public class CloudSave : MonoBehaviour
     }
     public async void LoadData()
     {
-        var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> {
+        var playerData = await CloudSaveService.Instance.Data.Player.LoadAsync(new HashSet<string> {""+seed.seed,
           "firstKeyName", "secondKeyName"
         });
-        if (playerData.TryGetValue("firstKeyName", out var firstKey))
+        if (playerData.TryGetValue(""+seed.seed, out var Listplayer))
         {
-            Debug.Log(firstKey.Value.GetAs<List<Pose>>());
-            Goto = firstKey.Value.GetAs<List<Pose>>();
+            Listplayerdata = Listplayer.Value.GetAs<List<RaceData>>();
+            Goto = Listplayerdata[0].poses;
         }
         if (playerData.TryGetValue("secondKeyName", out var secondKey))
         {
@@ -69,9 +68,11 @@ public class RaceData
 {
     public string name;
     public List<Pose> poses;
-    public RaceData(string _name, List<Pose> posess)
+    public float TimerTrack;
+    public RaceData(string _name, List<Pose> posess,float timer)
     {
         name = _name;
         poses = posess;
+        TimerTrack= timer;
     }
 }

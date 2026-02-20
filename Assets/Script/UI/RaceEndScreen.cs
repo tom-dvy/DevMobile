@@ -16,7 +16,7 @@ public class RaceEndScreen : MonoBehaviour
 
     private RaceTimer raceTimer;
     private CarController carController;
-
+    public Autosave save;
     private void Awake()
     {
         // Find required gameplay components in the scene
@@ -44,6 +44,7 @@ public class RaceEndScreen : MonoBehaviour
 
     private void ShowEndScreen(float totalTime, int laps)
     {
+        save.sendlist();
         // Show end screen UI
         if (endScreenPanel != null)
         {
