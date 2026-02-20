@@ -8,7 +8,7 @@ public class CarSpawner : MonoBehaviour
     [SerializeField] private Vector3 spawnOffset = new Vector3(0, 1, 5);
     [SerializeField] private bool spawnOnStart = true;
     [SerializeField] private float maxWaitTime = 2f;
-    [SerializeField] private bool disableCarControllerOnSpawn = true; // NOUVEAU
+    [SerializeField] private bool disableCarControllerOnSpawn = true;
 
     private void Start()
     {
@@ -81,7 +81,6 @@ public class CarSpawner : MonoBehaviour
             rb.angularVelocity = Vector3.zero;
         }
 
-        // NOUVEAU : Désactiver le CarController pour attendre le countdown
         if (disableCarControllerOnSpawn)
         {
             CarController carController = GetComponent<CarController>();

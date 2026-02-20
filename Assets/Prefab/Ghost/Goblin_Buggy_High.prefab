@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostRace
   cloud: {fileID: 0}
-  speed: 1
+  speed: 20
 --- !u!1 &2047521006608892881
 GameObject:
   m_ObjectHideFlags: 0
