@@ -7,7 +7,11 @@ public class Test : MonoBehaviour
     async void Start()
     {
         adsManager = AdsManager.instance;
-        await Awaitable.WaitForSecondsAsync(5f);
-        adsManager.RewardedAd(adsManager.rewardManager.ExampleReward);
+    }
+
+    public async void Example()
+    {
+        await Awaitable.WaitForSecondsAsync(2f);
+        adsManager.BannerAd(BannerPosition.TOP_LEFT, 5f);
     }
 }

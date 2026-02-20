@@ -91,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AdsManager
   _androidGameId: 6038399
   _iOSGameId: 6038398
-  _testMode: 1
+  _testMode: 0
   _iOSBannerAdUnitId: Banner_iOS
   _androidBannerAdUnitId: Banner_Android
   _iOSInterstitialAdUnitId: Interstitial_iOS

@@ -107,7 +107,7 @@ MonoBehaviour:
     - line: '|   androidApplicationEntry: 2'
     - line: '|   defaultIsNativeResolution: 1'
     - line: '|   macRetinaSupport: 1'
-    - line: '|   runInBackground: 0'
+    - line: '|   runInBackground: 1'
     - line: '|   muteOtherAudioSources: 0'
     - line: '|   Prepare IOS For Recording: 0'
     - line: '|   Force IOS Speakers When Recording: 0'
@@ -287,18 +287,18 @@ MonoBehaviour:
     - line: '|   templateDefaultScene: Assets/Scenes/SampleScene.unity'
     - line: '|   useCustomMainManifest: 0'
     - line: '|   useCustomLauncherManifest: 0'
-    - line: '|   useCustomMainGradleTemplate: 0'
+    - line: '|   useCustomMainGradleTemplate: 1'
     - line: '|   useCustomLauncherGradleManifest: 0'
     - line: '|   useCustomBaseGradleTemplate: 0'
-    - line: '|   useCustomGradlePropertiesTemplate: 0'
-    - line: '|   useCustomGradleSettingsTemplate: 0'
+    - line: '|   useCustomGradlePropertiesTemplate: 1'
+    - line: '|   useCustomGradleSettingsTemplate: 1'
     - line: '|   useCustomProguardFile: 0'
     - line: '|   AndroidTargetArchitectures: 3'
     - line: '|   AndroidAllowedArchitectures: -13'
     - line: '|   AndroidSplashScreenScale: 0'
     - line: '|   androidSplashScreen: {instanceID: 0}'
-    - line: '|   AndroidKeystoreName: '
-    - line: '|   AndroidKeyaliasName: '
+    - line: '|   AndroidKeystoreName: ''{inproject}: userKeystore.keystore'''
+    - line: '|   AndroidKeyaliasName: userkeystore'
     - line: '|   AndroidEnableArmv9SecurityFeatures: 0'
     - line: '|   AndroidEnableArm64MTE: 0'
     - line: '|   AndroidBuildApkPerCpuArchitecture: 0'
@@ -310,7 +310,7 @@ MonoBehaviour:
     - line: '|   AndroidEnableTango: 0'
     - line: '|   androidEnableBanner: 1'
     - line: '|   androidUseLowAccuracyLocation: 0'
-    - line: '|   androidUseCustomKeystore: 0'
+    - line: '|   androidUseCustomKeystore: 1'
     - line: '|   m_AndroidBanners:'
     - line: '|   - width: 320'
     - line: '|     height: 180'
@@ -961,7 +961,7 @@ MonoBehaviour:
     - line: '|   framebufferDepthMemorylessMode: 0'
     - line: '|   qualitySettingsNames: []'
     - line: '|   projectName: Devmobile'
-    - line: '|   organizationId: miekano'
+    - line: '|   organizationId: '
     - line: '|   cloudEnabled: 0'
     - line: '|   legacyClampBlendShapeWeights: 0'
     - line: '|   hmiLoadingImage: {instanceID: 0}'
@@ -1002,6 +1002,6 @@ MonoBehaviour:
         m_CurrentDeploymentTargetId: __builtin__target_default
         m_BuildType: 2
         m_LinkTimeOptimization: 0
-        m_BuildAppBundle: 0
+        m_BuildAppBundle: 1
         m_IPAddressToConnect: 
         m_SymlinkSources: 0
