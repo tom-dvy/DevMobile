@@ -14,7 +14,7 @@ public class RaceTimer : MonoBehaviour
 
     [Header("Timer State")]
     [SerializeField] private bool isRunning = false; // Is the race currently active
-    private float totalRaceTime = 0f;                // Total elapsed race time
+    public float totalRaceTime = 0f;                // Total elapsed race time
     private float currentLapTime = 0f;                // Elapsed time for the current lap
     private float bestLapTime = float.MaxValue;       // Best lap time recorded
     private int currentLap = 0;                        // Current lap index
