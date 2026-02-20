@@ -264,6 +264,6 @@ public class SignInUI : MonoBehaviour
 
     /*public void GoToFriendsScene()
     {
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Friends_Scene");
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Track_Scene");
     }*/
 }

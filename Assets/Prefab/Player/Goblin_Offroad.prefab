@@ -448,7 +448,7 @@ GameObject:
   - component: {fileID: 4578265475847392742}
   - component: {fileID: 8658157640981431684}
   - component: {fileID: 2749582840161144736}
-  - component: {fileID: 6142459207736585913}
+  - component: {fileID: 5868524916427341597}
   m_Layer: 0
   m_Name: Goblin_Offroad
   m_TagString: Untagged
@@ -591,7 +591,9 @@ MonoBehaviour:
   spawnOnStart: 1
   maxWaitTime: 2
   disableCarControllerOnSpawn: 1
---- !u!114 &6142459207736585913
+  ghostPrefab: {fileID: 0}
+  ghostSpawnOffset: {x: -2.5, y: 1, z: 5}
+--- !u!114 &5868524916427341597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -600,13 +602,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 4862819451959504845}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5d5261eae752184387ce3f3ee4c8b4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 515ccfa54251e144b932cca803a9ad55, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CloudSave
-  target: {fileID: 0}
-  Goto: []
-  seed: {fileID: 0}
-  Timer: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::Autosave
+  cloud: {fileID: 0}
+  _raceTimer: {fileID: 0}
+  actual: []
 --- !u!1 &5601279091611961538
 GameObject:
   m_ObjectHideFlags: 0
