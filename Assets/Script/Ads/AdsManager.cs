@@ -1,5 +1,4 @@
 using System;
-//using Mono.Cecil.Cil;
 using UnityEngine;
 using UnityEngine.Advertisements;
 
@@ -7,6 +6,8 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
 {
     // Singleton
     public static AdsManager instance {get; private set;}
+
+    bool adsRemoved = false;
 
     [Header("Ads Initialization")]
     [SerializeField] string _androidGameId;
@@ -53,6 +54,10 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
         rewardManager = GetComponentInChildren<RewardManager>();
     }
 
+    public void DisableAds()
+    {
+        adsRemoved = true;
+    }
 
     /// <summary>
     /// This function Initialize ads and select the good device ID.
@@ -95,6 +100,12 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     /// <param name="bannerDurationTime"></param>
     async public void BannerAd(BannerPosition bannerPosition, float bannerDurationTime)
     {
+        if(adsRemoved)
+        {
+            Debug.Log("AdsRemoved");
+            return;   
+        }
+
         if(!isInitialisationFinish)
         {
             Debug.Log("Ads not initialized", this);
@@ -144,6 +155,8 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     /// </summary>
     public void InterstitialAd()
     {
+        if(adsRemoved) return;
+
         if(!isInitialisationFinish)
         {
             Debug.Log("Ads not initialized", this);
@@ -167,6 +180,8 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     /// </summary>
     public void RewardedAd(Action _callbackOnRewaredAdsViewed)
     {
+        if(adsRemoved) return;
+
         if(!isInitialisationFinish)
         {
             Debug.LogError("Ads not initialized", this);

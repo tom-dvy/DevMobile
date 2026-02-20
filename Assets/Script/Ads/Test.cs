@@ -9,9 +9,8 @@ public class Test : MonoBehaviour
         adsManager = AdsManager.instance;
     }
 
-    public async void Example()
+    public void ToggleTest()
     {
-        await Awaitable.WaitForSecondsAsync(2f);
-        adsManager.BannerAd(BannerPosition.TOP_LEFT, 5f);
+        adsManager.RewardedAd(adsManager.rewardManager.ExampleReward);
     }
 }
