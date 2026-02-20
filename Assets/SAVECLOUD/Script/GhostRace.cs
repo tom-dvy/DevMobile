@@ -6,7 +6,6 @@ using Unity.Services.CloudSave.Models;
 using Unity.Services.Core;
 using Unity.AI;
 using UnityEngine;
-using EasyButtons;
 using UnityEngine.AI;
 using System;
 public class GhostRace : MonoBehaviour
@@ -31,30 +30,27 @@ public class GhostRace : MonoBehaviour
             Debug.LogError("I can't load the race ghosts because the user has got an issue signing in", this);
         }
     }
-
 	void Update()
     {
         if (!GhostraceStart)
         {
             return;
         }
-
         if(currentWaypoint == cloud.Goto.Count - 1)
         {
             GhostraceStart = false;
             return;
         }
-
         if (Vector3.Distance(cloud.Goto[currentWaypoint].position, transform.position) > 1)
         {
             transform.position = Vector3.MoveTowards(transform.position, cloud.Goto[currentWaypoint].position, speed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, cloud.Goto[currentWaypoint].rotation, speed * Time.deltaTime);
         }
         else
         {
             currentWaypoint++;
         }
     }
-
     IEnumerator isready()
     {
         cloud.LoadData();

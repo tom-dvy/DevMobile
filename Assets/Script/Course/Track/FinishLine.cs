@@ -8,7 +8,6 @@ public class FinishLine : MonoBehaviour
 {
     [SerializeField] private bool isStartLine = true;           // Defines if this line can start the race
     [SerializeField] private float minTimeBetweenPasses = 2f;   // Anti double-trigger delay (seconds)
-
     private RaceTimer raceTimer;
     private float lastPassTime;
 

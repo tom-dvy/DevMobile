@@ -9,6 +9,8 @@ using EasyButtons;
 public class Autosave : MonoBehaviour
 {
     public CloudSave cloud;
+    public RaceTimer _raceTimer;
+    
     [SerializeField] List<Pose> actual=new List<Pose>();
     void Start()
     {
@@ -20,18 +22,22 @@ public class Autosave : MonoBehaviour
     }
     IEnumerator SaveRun()
     {
-        Vector3 randomTransform = new (Random.Range(100,1000), 0, Random.Range(200,300));
-        Debug.Log(randomTransform);
-        Quaternion randomrotation = new Quaternion(Random.Range(1, 10), Random.Range(10, 20), Random.Range(20, 30), Random.Range(30,40));
-        Debug.Log(randomrotation);
-        yield return new WaitForSeconds(5f);
-        Pose actualpose = new Pose(randomTransform,randomrotation);
+        Vector3 Transform = new (transform.position.x, transform.position.y, transform.position.z);
+        Debug.Log(Transform);
+        Quaternion rotation = new Quaternion(transform.rotation.x, transform.rotation.y, transform.position.z,0);
+        Debug.Log(rotation);
+        yield return new WaitForSeconds(2);
+        Pose actualpose = new Pose(Transform,rotation);
         actual.Add(actualpose);
         StartCoroutine(SaveRun());
     }
     [Button]
     public void sendlist()
     {
-        cloud.SaveData(actual);
+        cloud.SaveRace(actual);
+    }
+    public void saveTime()
+    {
+        
     }
 }

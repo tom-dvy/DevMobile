@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 6758687372810292503}
   - component: {fileID: 4453208755466591112}
   - component: {fileID: 6667314414948519824}
+  - component: {fileID: 3067214978656455776}
   m_Layer: 0
   m_Name: Goblin_Body_NoInterior
   m_TagString: Untagged
@@ -212,6 +213,22 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3067214978656455776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1192662067264696003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 515ccfa54251e144b932cca803a9ad55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Autosave
+  cloud: {fileID: 0}
+  _raceTimer: {fileID: 0}
+  _finish: {fileID: 0}
+  actual: []
 --- !u!1 &1639771053302754739
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,6 +464,7 @@ GameObject:
   - component: {fileID: 306175597181271506}
   - component: {fileID: 4578265475847392742}
   - component: {fileID: 8658157640981431684}
+  - component: {fileID: 2288187613812922760}
   m_Layer: 0
   m_Name: Goblin_Offroad
   m_TagString: Untagged
@@ -572,6 +590,22 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &2288187613812922760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862819451959504845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 515ccfa54251e144b932cca803a9ad55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Autosave
+  cloud: {fileID: 0}
+  _raceTimer: {fileID: 0}
+  _finish: {fileID: 0}
+  actual: []
 --- !u!1 &5601279091611961538
 GameObject:
   m_ObjectHideFlags: 0
