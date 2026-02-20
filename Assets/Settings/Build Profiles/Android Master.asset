@@ -961,7 +961,7 @@ MonoBehaviour:
     - line: '|   framebufferDepthMemorylessMode: 0'
     - line: '|   qualitySettingsNames: []'
     - line: '|   projectName: Devmobile'
-    - line: '|   organizationId: miekano'
+    - line: '|   organizationId: '
     - line: '|   cloudEnabled: 0'
     - line: '|   legacyClampBlendShapeWeights: 0'
     - line: '|   hmiLoadingImage: {instanceID: 0}'
