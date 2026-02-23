@@ -591,8 +591,8 @@ MonoBehaviour:
   spawnOnStart: 1
   maxWaitTime: 2
   disableCarControllerOnSpawn: 1
-  ghostPrefab: {fileID: 0}
-  ghostSpawnOffset: {x: -2.5, y: 1, z: 5}
+  ghostPrefab: {fileID: 1803295365170180922, guid: a1190e069b2ff1848bcca97a5235e460, type: 3}
+  ghostOffset: {x: -2, y: 0, z: 0}
 --- !u!114 &5868524916427341597
 MonoBehaviour:
   m_ObjectHideFlags: 0

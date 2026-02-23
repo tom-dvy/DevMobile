@@ -208,7 +208,7 @@ Animator:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1803295365170180922}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Avatar: {fileID: 9000000, guid: 22b794849dc7f094d938cdc1d85d86de, type: 3}
   m_Controller: {fileID: 9100000, guid: fdd20b4e86e0bfb43a28bdc0c535b891, type: 2}
   m_CullingMode: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostRace
   cloud: {fileID: 0}
-  speed: 20
+  speed: 50
 --- !u!1 &2047521006608892881
 GameObject:
   m_ObjectHideFlags: 0
