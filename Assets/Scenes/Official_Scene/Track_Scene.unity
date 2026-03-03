@@ -816,7 +816,7 @@ PrefabInstance:
       objectReference: {fileID: 1753847046}
     - target: {fileID: 4578265475847392742, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
       propertyPath: inputMode
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4578265475847392742, guid: edaf14777fbc90c47a71b94262cf27ed, type: 3}
       propertyPath: variableJoystick

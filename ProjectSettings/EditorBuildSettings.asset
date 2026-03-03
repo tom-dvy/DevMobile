@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Friends_Scene.unity
     guid: 60ac9503cead8e64e97a79e6bcaaf7dd
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Tom.B.unity
     guid: 6b7818ec421a3aa419eedbb4fb2611f8
   - enabled: 1
