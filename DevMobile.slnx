@@ -33,8 +33,8 @@
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.Services.Authentication.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
-  <Project Path="PPv2URPConverters.csproj" />
   <Project Path="Unity.Services.Friends.Internal.Generated.csproj" />
+  <Project Path="PPv2URPConverters.csproj" />
   <Project Path="Unity.Services.Authentication.Editor.csproj" />
   <Project Path="Unity.Searcher.Editor.csproj" />
   <Project Path="Unity.Services.Wire.Internal.csproj" />
@@ -100,6 +100,7 @@
   <Project Path="UnityEditor.XR.LegacyInputHelpers.csproj" />
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
+  <Project Path="Unity.Recorder.Base.csproj" />
   <Project Path="Unity.Services.Core.Device.csproj" />
   <Project Path="Unity.Services.Core.Analytics.csproj" />
   <Project Path="LitMotion.Editor.csproj" />
