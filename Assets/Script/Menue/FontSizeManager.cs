@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// Gestionnaire de taille de police pour l'accessibilite
 /// Permet de changer la taille de tous les textes du jeu
 /// </summary>
+
 public class FontSizeManager : MonoBehaviour
 {
     private static FontSizeManager instance;
@@ -16,7 +17,7 @@ public class FontSizeManager : MonoBehaviour
         {
             if (instance == null)
             {
-                instance = FindFirstObjectByType<FontSizeManager>();
+                instance = FindObjectOfType<FontSizeManager>();
                 if (instance == null)
                 {
                     UnityEngine.GameObject obj = new UnityEngine.GameObject("FontSizeManager");

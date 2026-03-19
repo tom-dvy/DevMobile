@@ -31,18 +31,18 @@ public class SettingsMenu : MonoBehaviour
         //récupère les résolutins disponible pour le joueur et empêche les doublons
         resolutions = Screen.resolutions.Select(resolution => new Resolution { width = resolution.width, height = resolution.height }).Distinct().ToArray();
         resolutionDropdown.ClearOptions();
-        
+
         //liste des résolutions
         List<string> options = new List<string>();
 
         int currentResolutionIndex = 0;
-        for (int i =0; i < resolutions.Length; i++)
+        for (int i = 0; i < resolutions.Length; i++)
         {
             string option = resolutions[i].width + "x" + resolutions[i].height;
             options.Add(option);
 
             //resolutions appliquer automatiquement
-            if(resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
+            if (resolutions[i].width == Screen.width && resolutions[i].height == Screen.height)
             {
                 currentResolutionIndex = i;
             }
@@ -68,7 +68,7 @@ public class SettingsMenu : MonoBehaviour
     }
 
     //pleine écran
-    public void SetFullScreen (bool isFullScreen)
+    public void SetFullScreen(bool isFullScreen)
     {
         Screen.fullScreen = isFullScreen;
     }
