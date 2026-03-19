@@ -38,6 +38,7 @@ public class TrackGenerator : MonoBehaviour
     {
         // Remove previously generated segments
         ClearTrack();
+        Random.InitState((int)System.DateTime.Now.Ticks);
 
         // Initialize random generator
         Random.InitState(seed);

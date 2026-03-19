@@ -133,7 +133,6 @@ GameObject:
   - component: {fileID: 6758687372810292503}
   - component: {fileID: 4453208755466591112}
   - component: {fileID: 6667314414948519824}
-  - component: {fileID: 3067214978656455776}
   m_Layer: 0
   m_Name: Goblin_Body_NoInterior
   m_TagString: Untagged
@@ -213,22 +212,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3067214978656455776
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1192662067264696003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 515ccfa54251e144b932cca803a9ad55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Autosave
-  cloud: {fileID: 0}
-  _raceTimer: {fileID: 0}
-  _finish: {fileID: 0}
-  actual: []
 --- !u!1 &1639771053302754739
 GameObject:
   m_ObjectHideFlags: 0
@@ -464,7 +447,8 @@ GameObject:
   - component: {fileID: 306175597181271506}
   - component: {fileID: 4578265475847392742}
   - component: {fileID: 8658157640981431684}
-  - component: {fileID: 2288187613812922760}
+  - component: {fileID: 2749582840161144736}
+  - component: {fileID: 5868524916427341597}
   m_Layer: 0
   m_Name: Goblin_Offroad
   m_TagString: Untagged
@@ -550,12 +534,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c9651e759b344409d018096dee791b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
-  forwardSpeed: 20
-  acceleration: 10
+  forwardSpeed: 40
+  acceleration: 15
   turnSpeed: 70
   brakeDeceleration: 15
   minSpeed: 0.1
-  inputMode: 0
+  inputMode: 1
   leftKey: 15
   rightKey: 18
   brakeKey: 51
@@ -579,18 +563,37 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+        m_TargetAssemblyTypeName: ItemSpriteHandler, Assembly-CSharp
+        m_MethodName: UpdateItemUI
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2288187613812922760
+--- !u!114 &2749582840161144736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4862819451959504845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 669e047e4a92d754fb929246627f78ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarSpawner
+  trackGenerator: {fileID: 0}
+  spawnOffset: {x: 0, y: 1, z: 5}
+  spawnOnStart: 1
+  maxWaitTime: 2
+  disableCarControllerOnSpawn: 1
+  ghostPrefab: {fileID: 1803295365170180922, guid: a1190e069b2ff1848bcca97a5235e460, type: 3}
+  ghostOffset: {x: -2, y: 0, z: 0}
+--- !u!114 &5868524916427341597
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -604,7 +607,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Autosave
   cloud: {fileID: 0}
   _raceTimer: {fileID: 0}
-  _finish: {fileID: 0}
   actual: []
 --- !u!1 &5601279091611961538
 GameObject:

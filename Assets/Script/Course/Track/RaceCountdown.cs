@@ -1,65 +1,71 @@
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.UI;
 
-/// <summary>
-/// Displays and manages a countdown before the race starts
-/// Disables car control during the countdown, then enables it when finished
-/// Supports UI text, panel display, and optional audio feedback
-/// </summary>
 public class RaceCountdown : MonoBehaviour
 {
     [Header("Countdown Settings")]
-    [SerializeField] private float countdownDuration = 3f; // Countdown length in seconds
-    [SerializeField] private bool startOnLoad = true;       // Start countdown automatically on scene load
-
+    [SerializeField] private float countdownDuration = 3f;
+    [SerializeField] private bool startOnLoad = true;
+    
     [Header("UI References")]
-    [SerializeField] private TextMeshProUGUI countdownText; // Text displaying countdown numbers
-    [SerializeField] private GameObject countdownPanel;     // Panel containing countdown UI
+    [SerializeField] private TextMeshProUGUI countdownText;
+    [SerializeField] private GameObject countdownPanel;
+    
+    [Header("Starting Lights (Feux)")]
+    [SerializeField] private GameObject lightsPanel;
+    [Tooltip("Assigne 6 images : les deux du '3', puis les deux du '2', puis les deux du '1'")]
+    [SerializeField] private Image[] raceLights; 
+    [SerializeField] private Color colorOff = new Color(0.2f, 0.2f, 0.2f, 1f);
+    [SerializeField] private Color colorRed = Color.red;
+    [SerializeField] private Color colorGreen = Color.green;
 
-    [Header("Car Reference")]
-    [SerializeField] private CarController carController;   // Car to disable/enable during countdown
-
+    [Header("Car Reference (Optional)")]
+    [SerializeField] private CarController carController;
+    
     [Header("Audio (Optional)")]
-    [SerializeField] private AudioClip countdownBeep; // Sound played each second
-    [SerializeField] private AudioClip goSound;        // Sound played at "GO!"
-
+    [SerializeField] private AudioClip countdownBeep;
+    [SerializeField] private AudioClip goSound;
+    
     private bool countdownFinished = false;
     private AudioSource audioSource;
 
-    private void Start()
+    void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        
+        if (carController == null)
+            carController = FindFirstObjectByType<CarController>();
 
+        ResetLights();
+        
         if (startOnLoad)
-        {
-            StartCountdown();
-        }
+            Invoke(nameof(StartCountdown), 0.5f);
     }
 
-    // Starts the countdown if it has not already been completed
     public void StartCountdown()
     {
         if (countdownFinished) return;
-
         StartCoroutine(CountdownRoutine());
+    }
+
+    private void ResetLights()
+    {
+        foreach (Image light in raceLights)
+        {
+            if (light != null) light.color = colorOff;
+        }
+        if (lightsPanel != null) lightsPanel.SetActive(false);
     }
 
     private IEnumerator CountdownRoutine()
     {
-        // Disable car control during countdown
-        if (carController != null)
-        {
-            carController.enabled = false;
-        }
-
-        // Show countdown UI
-        if (countdownPanel != null)
-        {
-            countdownPanel.SetActive(true);
-        }
-
-        // Countdown sequence: 3, 2, 1...
+        if (carController != null) carController.enabled = false;
+        
+        if (countdownPanel != null) countdownPanel.SetActive(true);
+        if (lightsPanel != null) lightsPanel.SetActive(true);
+        
         for (int i = (int)countdownDuration; i > 0; i--)
         {
             if (countdownText != null)
@@ -68,48 +74,44 @@ public class RaceCountdown : MonoBehaviour
                 countdownText.fontSize = 120;
             }
 
-            // Play countdown beep
-            if (audioSource != null && countdownBeep != null)
-            {
-                audioSource.PlayOneShot(countdownBeep);
-            }
+            int pairIndex = (int)countdownDuration - i; 
+            int oppositeIndex = (raceLights.Length - 1) - pairIndex;
 
+            if (pairIndex < raceLights.Length && raceLights[pairIndex] != null)
+                raceLights[pairIndex].color = colorRed;
+
+            if (oppositeIndex >= 0 && raceLights[oppositeIndex] != null)
+                raceLights[oppositeIndex].color = colorRed;
+            
+            if (audioSource != null && countdownBeep != null)
+                audioSource.PlayOneShot(countdownBeep);
+            
             yield return new WaitForSeconds(1f);
         }
-
-        // Display "GO!"
+        
         if (countdownText != null)
         {
             countdownText.text = "GO!";
             countdownText.fontSize = 150;
         }
 
-        // Play start sound
+        foreach (Image light in raceLights)
+        {
+            if (light != null) light.color = colorGreen;
+        }
+        
         if (audioSource != null && goSound != null)
-        {
             audioSource.PlayOneShot(goSound);
-        }
-
+        
         yield return new WaitForSeconds(1f);
-
-        // Hide countdown UI
-        if (countdownPanel != null)
-        {
-            countdownPanel.SetActive(false);
-        }
-
-        // Re-enable car control
-        if (carController != null)
-        {
-            carController.enabled = true;
-        }
-
+        
+        if (countdownPanel != null) countdownPanel.SetActive(false);
+        if (lightsPanel != null) lightsPanel.SetActive(false);
+        
+        if (carController != null) carController.enabled = true;
+        
         countdownFinished = true;
     }
 
-    // Returns true once the countdown has fully completed
-    public bool IsCountdownFinished()
-    {
-        return countdownFinished;
-    }
+    public bool IsCountdownFinished() => countdownFinished;
 }

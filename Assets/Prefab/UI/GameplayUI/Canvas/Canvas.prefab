@@ -170,7 +170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d8bf5431385f164f80f142e394c52d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemSpriteHandler
-  iconImage: {fileID: 0}
+  iconImage: {fileID: 3591871030979108135}
   backgroundFrame: {fileID: 0}
 --- !u!1001 &408284560479062824
 PrefabInstance:
@@ -580,3 +580,14 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5525964368662857469, guid: 7dc892ad83434c24183b9959abbfc0d6, type: 3}
   m_PrefabInstance: {fileID: 5743227303631134936}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3591871030979108135 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9109912752604102143, guid: 7dc892ad83434c24183b9959abbfc0d6, type: 3}
+  m_PrefabInstance: {fileID: 5743227303631134936}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
