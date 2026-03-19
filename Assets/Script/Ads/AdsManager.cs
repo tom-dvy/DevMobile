@@ -7,7 +7,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     // Singleton
     public static AdsManager instance {get; private set;}
 
-    bool adsRemoved = false;
+    [SerializeField] bool adsRemoved = false;
 
     [Header("Ads Initialization")]
     [SerializeField] string _androidGameId;
@@ -57,6 +57,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
     public void DisableAds()
     {
         adsRemoved = true;
+        Debug.Log("Ads will not appeard anymore");
     }
 
     /// <summary>

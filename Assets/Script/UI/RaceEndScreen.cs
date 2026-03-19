@@ -17,6 +17,8 @@ public class RaceEndScreen : MonoBehaviour
     private RaceTimer raceTimer;
     private CarController carController;
     public Autosave save;
+
+    AdsManager adsManager = AdsManager.instance;
     private void Awake()
     {
         // Find required gameplay components in the scene
@@ -30,6 +32,7 @@ public class RaceEndScreen : MonoBehaviour
         if (raceTimer != null)
         {
             raceTimer.onRaceComplete.AddListener(ShowEndScreen);
+            adsManager.InterstitialAd();
         }
     }
 

@@ -24,6 +24,8 @@ public class RaceTimer : MonoBehaviour
     public UnityEvent<float, int> onLapComplete;       // Lap time, new lap index
     public UnityEvent<float, int> onRaceComplete;     // Total time, total laps
 
+    AdsManager adsManager = AdsManager.instance;
+
     private void Update()
     {
         if (!isRunning) return;
@@ -41,6 +43,8 @@ public class RaceTimer : MonoBehaviour
         totalRaceTime = 0f;
         currentLapTime = 0f;
         currentLap = 1;
+
+        adsManager.BannerAd(UnityEngine.Advertisements.BannerPosition.TOP_CENTER, 20f);
 
         onRaceStart?.Invoke();
     }
