@@ -1624,6 +1624,7 @@ GameObject:
   - component: {fileID: 424138389}
   - component: {fileID: 424138391}
   - component: {fileID: 424138390}
+  - component: {fileID: 424138392}
   m_Layer: 5
   m_Name: Panel_Menue
   m_TagString: Untagged
@@ -1690,6 +1691,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 424138388}
   m_CullTransparentMesh: 1
+--- !u!114 &424138392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 424138388}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f2746fd8fb3b9047baa59820a9fd6b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &433644970
 GameObject:
   m_ObjectHideFlags: 0
@@ -2239,7 +2252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.7687, y: -112.4163}
+  m_AnchoredPosition: {x: -6.7686768, y: -112.41632}
   m_SizeDelta: {x: -585.4926, y: -467.4198}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &579964161
@@ -3647,6 +3660,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 925009720}
+  - component: {fileID: 925009721}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -3669,6 +3683,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &925009721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925009719}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c5e40a10e428904eb29f1e60a1614ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1035172913
 GameObject:
   m_ObjectHideFlags: 0
@@ -5519,13 +5545,13 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 25
+  m_VertexColorAlwaysGammaSpace: 1
+  m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
