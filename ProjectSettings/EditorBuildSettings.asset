@@ -12,5 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/SceneLeandre.unity
     guid: f85cc00d3e48bc94f964be601b8c812a
   m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: b2af5f211a2ff104b8325d7962d92387, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+    com.unity.localization.settings: {fileID: 11400000, guid: 6f99d49de8f29544d8cfd18728c1231e, type: 2}
   m_UseUCBPForAssetBundles: 0

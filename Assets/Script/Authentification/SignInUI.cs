@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
+using UnityEngine.Localization;
 
 /// <summary>
 /// Interface de connexion Unity Player Accounts + demande de pseudo
@@ -25,6 +26,8 @@ public class SignInUI : MonoBehaviour
     [SerializeField] private GameObject gamePanel;
     [SerializeField] private TextMeshProUGUI welcomeText;
     [SerializeField] private Button signOutButton;
+
+    [SerializeField] private LocalizedString welcomeLocalizeString;
     
     private Coroutine checkAuthCoroutine;
 
@@ -222,7 +225,7 @@ public class SignInUI : MonoBehaviour
     {
         if (welcomeText != null)
         {
-            welcomeText.text = $"Welcome, {playerName}!";
+            welcomeText.text = welcomeLocalizeString.GetLocalizedString();
         }
     }
 
