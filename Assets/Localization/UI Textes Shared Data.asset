@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b11a58205ec3474ca216360e9fa74a8, type: 3}
+  m_Name: UI Textes Shared Data
+  m_EditorClassIdentifier: Unity.Localization::UnityEngine.Localization.Tables.SharedTableData
+  m_TableCollectionName: UI Textes
+  m_TableCollectionNameGuidString: 4002a53a9c3ad584e8275e4b7637e5d0
+  m_Entries:
+  - m_Id: 96810668032
+    m_Key: MENU_PLAY
+    m_Metadata:
+      m_Items: []
+  - m_Id: 232076972032
+    m_Key: 'MENU_SETTINGS '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 332119511040
+    m_Key: 'MENU_LEADERBOARD '
+    m_Metadata:
+      m_Items: []
+  - m_Id: 409621860352
+    m_Key: SETTINGS_LANGUAGE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 436482183168
+    m_Key: SETTINGS_FONT_SIZE
+    m_Metadata:
+      m_Items: []
+  - m_Id: 498352361472
+    m_Key: GAME_TIME
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2609819521024
+    m_Key: CONNEXION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 2917270392832
+    m_Key: DECONNEXION
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8060766359552
+    m_Key: Tom.B/Canvas/SignInPanel/SignTMP
+    m_Metadata:
+      m_Items: []
+  - m_Id: 8618801729536
+    m_Key: Tom.B/Canvas/GamePanel/Play/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 10923081043968
+    m_Key: Tom.B/Canvas/GamePanel/Settings/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11175779471360
+    m_Key: Tom.B/Canvas/GamePanel/Customize/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 11644010598400
+    m_Key: Tom.B/Canvas/GamePanel/Sign Out/Text (TMP)
+    m_Metadata:
+      m_Items: []
+  - m_Id: 19157867139072
+    m_Key: NAME_PLAYER
+    m_Metadata:
+      m_Items: []
+  - m_Id: 23337080033280
+    m_Key: Tom.B/Canvas/GamePanel/Settings/Text (TMP) 1
+    m_Metadata:
+      m_Items: []
+  m_Metadata:
+    m_Items: []
+  m_KeyGenerator:
+    rid: 7927653965445988574
+  references:
+    version: 2
+    RefIds:
+    - rid: 7927653965445988574
+      type: {class: DistributedUIDGenerator, ns: UnityEngine.Localization.Tables, asm: Unity.Localization}
+      data:
+        m_CustomEpoch: 1770990287713
