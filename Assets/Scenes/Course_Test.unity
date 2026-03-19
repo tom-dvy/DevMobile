@@ -1116,6 +1116,10 @@ PrefabInstance:
       value: TrackManager
       objectReference: {fileID: 0}
     - target: {fileID: 3776721215672290668, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
+      propertyPath: seed
+      value: 12345
+      objectReference: {fileID: 0}
+    - target: {fileID: 3776721215672290668, guid: f9e84b62428fe89438f8e3a407dc879f, type: 3}
       propertyPath: startSegment
       value: 
       objectReference: {fileID: 8497101592189174596, guid: 09fa3dba0f680784192797afcde3781b, type: 3}

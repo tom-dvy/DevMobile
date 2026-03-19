@@ -264,4 +264,9 @@ public class SignInUI : MonoBehaviour
             signOutButton.onClick.RemoveAllListeners();
         }
     }
+
+    /*public void GoToFriendsScene()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Track_Scene");
+    }*/
 }
