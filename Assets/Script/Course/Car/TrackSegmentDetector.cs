@@ -1,10 +1,6 @@
 using UnityEngine;
 
-/// <summary>
-/// Détecte automatiquement le segment de piste le plus proche du joueur via raycasting.
-/// Met à jour le PlayerRespawner avec le segment actuel.
-/// Attachez ce script au GameObject du joueur.
-/// </summary>
+
 public class TrackSegmentDetector : MonoBehaviour
 {
     [SerializeField] private LayerMask trackLayer = LayerMask.GetMask("Default");
@@ -38,13 +34,11 @@ public class TrackSegmentDetector : MonoBehaviour
         if (_playerRespawner == null)
             return;
 
-        // Raycast vers le bas pour détecter la piste
         if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, raycastDistance, trackLayer))
         {
             if (debugMode)
                 Debug.Log($"Raycast hit: {hit.collider.name}");
 
-            // Essayer de récupérer TrackSegment sur l'objet touché ou son parent
             TrackSegment segment = hit.collider.GetComponent<TrackSegment>();
             
             if (segment == null)
@@ -72,7 +66,6 @@ public class TrackSegmentDetector : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        // Visualiser le rayon de détection en debug
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position + Vector3.down * raycastDistance);
     }
