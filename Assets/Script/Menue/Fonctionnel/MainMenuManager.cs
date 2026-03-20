@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 
-
 public class MainMenuManager : MonoBehaviour
 {
     [Header("Panneaux UI")]
@@ -16,31 +15,20 @@ public class MainMenuManager : MonoBehaviour
     {
         mainPanel.SetActive(true);
         settingsPanel.SetActive(false);
+
+        if (FontSizeManager.Instance != null)
+        {
+            FontSizeManager.Instance.RegisterAllTextsInScene();
+        }
     }
 
-
-    public void PlayGame()
-    {
-        SceneManager.LoadScene(gameSceneName);
-    }
+    public void PlayGame() => SceneManager.LoadScene(gameSceneName);
 
     public void OpenSettings()
     {
         mainPanel.SetActive(false);
         settingsPanel.SetActive(true);
     }
-
-    public void QuitGame()
-    {
-        Debug.Log("Fermeture du jeu...");
-        
-        #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
-        #else
-            Application.Quit();
-        #endif
-    }
-
 
     public void CloseSettings()
     {
@@ -51,6 +39,19 @@ public class MainMenuManager : MonoBehaviour
     public void SetVolume(float volume)
     {
         AudioListener.volume = volume;
-        Debug.Log("Volume réglé sur : " + volume);
+    }
+
+    public void OnFontSizeChanged(int index)
+    {
+        FontSizeManager.Instance.SetFontSizeByIndex(index);
+    }
+
+    public void QuitGame()
+    {
+        #if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            Application.Quit();
+        #endif
     }
 }
