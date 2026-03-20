@@ -536,12 +536,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c9651e759b344409d018096dee791b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarController
-  forwardSpeed: 40
+  forwardSpeed: 50
   acceleration: 15
   turnSpeed: 70
   brakeDeceleration: 15
   minSpeed: 0.1
-  inputMode: 1
+  inputMode: 0
   leftKey: 15
   rightKey: 18
   brakeKey: 51
@@ -637,9 +637,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackSegmentDetector
   trackLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 8
   raycastDistance: 10
   updateInterval: 0.1
+  debugMode: 0
 --- !u!1 &5601279091611961538
 GameObject:
   m_ObjectHideFlags: 0
