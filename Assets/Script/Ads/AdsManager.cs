@@ -203,6 +203,11 @@ public class AdsManager : MonoBehaviour, IUnityAdsInitializationListener, IUnity
         ShowAd();
     }
 
+    public void CallRewardedAd(Action _callbackOnRewaredAdsViewed)
+    {
+        RewardedAd(_callbackOnRewaredAdsViewed);
+    }
+
     public void LoadAd()
     {
         Debug.Log("Loading Ad: " + _adUnitId);

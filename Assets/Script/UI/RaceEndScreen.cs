@@ -88,4 +88,9 @@ public class RaceEndScreen : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
         );
     }
+
+    public void ReturnToMainMenu()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Menu_Scene");
+    }
 }
